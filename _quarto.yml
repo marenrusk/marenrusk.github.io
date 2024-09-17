@@ -9,6 +9,9 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - text: "Data Viz"
+        menu: 
+         - text: TidyTuesday!
 
 format:
   html:
