@@ -12,7 +12,7 @@ website:
 
 format:
   html:
-    theme: sandstone
+    theme: cosmo
     css: styles.css
     toc: true
     page-layout: full
