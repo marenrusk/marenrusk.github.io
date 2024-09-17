@@ -4,7 +4,21 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\nThis is my first website!"
+    "text": "This is my first website!"
+  },
+  {
+    "objectID": "visualization1.html",
+    "href": "visualization1.html",
+    "title": "Maren Rusk",
+    "section": "",
+    "text": "This will become an HTML file."
+  },
+  {
+    "objectID": "visualization2.html",
+    "href": "visualization2.html",
+    "title": "Maren Rusk",
+    "section": "",
+    "text": "This is my second TidyTuesday visualization!"
   },
   {
     "objectID": "index.html",

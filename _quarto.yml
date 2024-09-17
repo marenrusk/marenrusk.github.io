@@ -12,6 +12,9 @@ website:
       - text: "Data Viz"
         menu: 
          - text: TidyTuesday!
+           href: visualization1.html
+         - text: TidyTuesday2!!
+           href: visualization2.html
 
 format:
   html:
