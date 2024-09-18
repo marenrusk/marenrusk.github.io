@@ -7,11 +7,9 @@ about:
   image-shape: round
   image-width: 17em
   links: 
-    - icon: Github
-      text: Email
+    - text: Email
       href: mailto:msrx2023@mymail.pomona.edu
-    - icon: GitHub
-      text: GitHub
+    - text: GitHub
       href: https://github.com/marenrusk
 ---
 

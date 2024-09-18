@@ -1,1 +1,9 @@
+---
+title: "Cheese!"
+description: Analysis of cheese data from TidyTuesday
+author: Maren Rusk
+date: September 18, 2024
+format: html
+---
+
 This is my second TidyTuesday visualization!

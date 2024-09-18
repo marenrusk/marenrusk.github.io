@@ -11,9 +11,9 @@ website:
       - about.qmd
       - text: "Data Viz"
         menu: 
-         - text: TidyTuesday!
+         - text: Olympics
            href: visualization1.html
-         - text: TidyTuesday2!!
+         - text: Cheese
            href: visualization2.html
 
 format:

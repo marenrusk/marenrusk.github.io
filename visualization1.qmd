@@ -1,2 +1,9 @@
+---
+title: "Olympics"
+description: Analysis of Olympic athletes and medals data from TidyTuesday
+author: Maren Rusk
+date: September 18, 2024
+format: html
+---
 
 This will become an HTML file.
