@@ -4,6 +4,28 @@ description: Analysis of cheese data from TidyTuesday
 author: Maren Rusk
 date: September 18, 2024
 format: html
+execute:
+  warning: false
+  message: false
 ---
 
-This is my second TidyTuesday visualization!
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+cheeses <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-06-04/cheeses.csv')
+```
+
+```{r}
+
+ggplot(cheeses, aes(x = rind, color = color)) + 
+  geom_bar() + 
+  labs(
+    title = "Cheese Rind Count by Color",
+    x = "Rind Type",
+    y = "Count"
+  ) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+**Link to Data:** <https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04>

@@ -2,4 +2,4 @@
 title: "About"
 ---
 
-This is my first website!
+Welcome to my page!

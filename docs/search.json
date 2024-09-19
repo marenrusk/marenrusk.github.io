@@ -1,24 +1,24 @@
 [
   {
-    "objectID": "visualization1.html",
-    "href": "visualization1.html",
-    "title": "Olympics",
-    "section": "",
-    "text": "Question: How does the average age of Olympic participants vary by sport and how has that changed over time? (I have selected 6 sports from the data for readability purposes.)\nCode:\n\nknitr::opts_chunk$set(error = TRUE)\n\nlibrary(tidyverse)\nlibrary(ggplot2)\nlibrary(dplyr)\n\nolympics &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-08-06/olympics.csv')\n\n\nselected_sports &lt;- filter(olympics, sport == \"Swimming\" | sport == \"Gymnastics\" | sport == \"Equestrianism\" | sport == \"Diving\" | sport == \"Weightlifting\" | sport == \"Speed Skating\")\n\nnew_olympics &lt;- selected_sports |&gt;\n  group_by(year, sport) |&gt;\n  mutate(avg_age = mean(age, na.rm = TRUE))\n\nggplot(new_olympics, aes(x = year, y = avg_age, color = sport)) + \n  geom_line() + \n  labs(\n    title = \"Average Age of Olympic Participants by Sport\",\n    x = \"Olympic Year\", \n    y = \"Average age of Participants\"\n  )\n\n\n\n\n\n\n\n\nAnalysis:\nFrom this plot, we can see that the average age of Equestrian Olympians has been consistently 5+ years greater than the averages of the other five sports shown between 1890 and 2010. Notably, where most sports saw a large increase in average age between the late 1800s and early 1900s, equestrianism shows a large decrease in average participant age during these years.\nAmong the other sports, swimming consistently had the lowest average age of competitors, until Gymnastics surpassed it in the mid-1980s. Meanwhile, weightlifting has average ages of its Olympians most consistently on the high end, but still nowhere near the equestrian average.\nOverall, there does not appear to be a very strong relationship between year and average age of Olympic participants that is consistent across these sports, except an all-around dip in age around 1980.\nLink to Data: https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06"
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "This is my first website!"
+    "text": "Welcome to my page!"
+  },
+  {
+    "objectID": "visualization1.html",
+    "href": "visualization1.html",
+    "title": "Olympics",
+    "section": "",
+    "text": "Question: How does the average age of Olympic participants vary by sport and how has that changed over time? (I have selected 6 sports from the data for readability purposes.)\nCode:\n\nknitr::opts_chunk$set(error = TRUE)\n\nlibrary(tidyverse)\nlibrary(ggplot2)\n\nolympics &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-08-06/olympics.csv')\n\n\nselected_sports &lt;- filter(olympics, sport == \"Swimming\" | sport == \"Gymnastics\" \n                          | sport == \"Equestrianism\" | sport == \"Diving\" | sport == \"Weightlifting\" | sport == \"Speed Skating\")\n\nnew_olympics &lt;- selected_sports |&gt;\n  group_by(year, sport) |&gt;\n  mutate(avg_age = mean(age, na.rm = TRUE))\n\nggplot(new_olympics, aes(x = year, y = avg_age, color = sport)) + \n  geom_line() + \n  labs(\n    title = \"Average Age of Olympic Participants by Sport\",\n    x = \"Olympic Year\", \n    y = \"Average age of Participants\"\n  )\n\n\n\n\n\n\n\n\nAnalysis:\nFrom this plot, we can see that the average age of Equestrian Olympians has been consistently 5+ years greater than the averages of the other five sports shown between 1890 and 2010. Notably, where most sports saw a large increase in average age between the late 1800s and early 1900s, equestrianism shows a large decrease in average participant age during these years.\nAmong the other sports, swimming consistently had the lowest average age of competitors, until Gymnastics surpassed it in the mid-1980s. Meanwhile, weightlifting has average ages of its Olympians most consistently on the high end, but still nowhere near the equestrian average.\nOverall, there does not appear to be a very strong relationship between year and average age of Olympic participants that is consistent across these sports, except an all-around dip in age around 1980.\nLink to Data: https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06"
   },
   {
     "objectID": "visualization2.html",
     "href": "visualization2.html",
     "title": "Cheese!",
     "section": "",
-    "text": "This is my second TidyTuesday visualization!"
+    "text": "library(tidyverse)\nlibrary(ggplot2)\n\ncheeses &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-06-04/cheeses.csv')\n\n\nggplot(cheeses, aes(x = rind, color = color)) + \n  geom_bar() + \n  labs(\n    title = \"Cheese Rind Count by Color\",\n    x = \"Rind Type\",\n    y = \"Count\"\n  ) + \n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n\n\n\n\n\n\n\nLink to Data: https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04"
   },
   {
     "objectID": "index.html",
