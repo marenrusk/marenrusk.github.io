@@ -8,7 +8,7 @@
 
 <meta name="author" content="Maren Rusk">
 <meta name="dcterms.date" content="2024-09-18">
-<meta name="description" content="Analysis of Olympic athletes and medals data from TidyTuesday">
+<meta name="description" content="Analysis of Olympic athletes from TidyTuesday">
 
 <title>Maren Rusk - Olympics</title>
 <style>
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -138,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Analysis of Olympic athletes and medals data from TidyTuesday
+    Analysis of Olympic athletes from TidyTuesday
   </div>
 </div>
 
@@ -167,7 +201,44 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This will become an HTML file.</p>
+<p><strong>Question:</strong> How does the average age of Olympic participants vary by sport and how has that changed over time? <em>(I have selected 6 sports from the data for readability purposes.)</em></p>
+<p><strong>Code:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">error =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>olympics <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-08-06/olympics.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>selected_sports <span class="ot">&lt;-</span> <span class="fu">filter</span>(olympics, sport <span class="sc">==</span> <span class="st">"Swimming"</span> <span class="sc">|</span> sport <span class="sc">==</span> <span class="st">"Gymnastics"</span> <span class="sc">|</span> sport <span class="sc">==</span> <span class="st">"Equestrianism"</span> <span class="sc">|</span> sport <span class="sc">==</span> <span class="st">"Diving"</span> <span class="sc">|</span> sport <span class="sc">==</span> <span class="st">"Weightlifting"</span> <span class="sc">|</span> sport <span class="sc">==</span> <span class="st">"Speed Skating"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>new_olympics <span class="ot">&lt;-</span> selected_sports <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sport) <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">avg_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(new_olympics, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> avg_age, <span class="at">color =</span> sport)) <span class="sc">+</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Age of Olympic Participants by Sport"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Olympic Year"</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average age of Participants"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="visualization1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis:</strong></p>
+<p>From this plot, we can see that the average age of Equestrian Olympians has been consistently 5+ years greater than the averages of the other five sports shown between 1890 and 2010. Notably, where most sports saw a large increase in average age between the late 1800s and early 1900s, equestrianism shows a large decrease in average participant age during these years.</p>
+<p>Among the other sports, swimming consistently had the lowest average age of competitors, until Gymnastics surpassed it in the mid-1980s. Meanwhile, weightlifting has average ages of its Olympians most consistently on the high end, but still nowhere near the equestrian average.</p>
+<p>Overall, there does not appear to be a very strong relationship between year and average age of Olympic participants that is consistent across these sports, except an all-around dip in age around 1980.</p>
+<p><strong>Link to Data:</strong> <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06" class="uri">https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06</a></p>
 
 
 

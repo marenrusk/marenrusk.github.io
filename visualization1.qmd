@@ -1,9 +1,54 @@
 ---
 title: "Olympics"
-description: Analysis of Olympic athletes and medals data from TidyTuesday
+description: Analysis of Olympic athletes from TidyTuesday
 author: Maren Rusk
 date: September 18, 2024
 format: html
+execute:
+  warning: false
+  message: false
 ---
 
-This will become an HTML file.
+**Question:** How does the average age of Olympic participants vary by sport and how has that changed over time? *(I have selected 6 sports from the data for readability purposes.)*
+
+**Code:**
+
+```{r}
+
+knitr::opts_chunk$set(error = TRUE)
+
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
+olympics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-08-06/olympics.csv')
+```
+
+```{r}
+selected_sports <- filter(olympics, sport == "Swimming" | sport == "Gymnastics" | sport == "Equestrianism" | sport == "Diving" | sport == "Weightlifting" | sport == "Speed Skating")
+
+new_olympics <- selected_sports |>
+  group_by(year, sport) |>
+  mutate(avg_age = mean(age, na.rm = TRUE))
+
+ggplot(new_olympics, aes(x = year, y = avg_age, color = sport)) + 
+  geom_line() + 
+  labs(
+    title = "Average Age of Olympic Participants by Sport",
+    x = "Olympic Year", 
+    y = "Average age of Participants"
+  )
+
+
+
+```
+
+**Analysis:**
+
+From this plot, we can see that the average age of Equestrian Olympians has been consistently 5+ years greater than the averages of the other five sports shown between 1890 and 2010. Notably, where most sports saw a large increase in average age between the late 1800s and early 1900s, equestrianism shows a large decrease in average participant age during these years.
+
+Among the other sports, swimming consistently had the lowest average age of competitors, until Gymnastics surpassed it in the mid-1980s. Meanwhile, weightlifting has average ages of its Olympians most consistently on the high end, but still nowhere near the equestrian average.
+
+Overall, there does not appear to be a very strong relationship between year and average age of Olympic participants that is consistent across these sports, except an all-around dip in age around 1980.
+
+**Link to Data:** <https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06>
