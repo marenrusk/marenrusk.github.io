@@ -1,0 +1,76 @@
+---
+title: "Text Analysis"
+description: My analysis
+author: Maren Rusk
+date: September 18, 2024
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+Here is my text analysis of NYT Headlines!
+
+Questions of Interest:
+1. Which president (Bill Clinton or George W. Bush) were mentioned in more NYT Headlines during their respective presidential terms (Clinton 1997-2000 / Bush 2001-2004)?
+
+- large difference
+- is this because it was clinton's 2nd term/ bush's first term? or because more happened during bush's term (9/11)? or was there more overall NYT coverage then?
+
+2. Have headlines about the supreme court become more frequent over time (between 1996 and 2006)?
+
+3. Does the average length/number of the words in NYT headlines vary by month? year?
+
+
+
+```{r}
+library(RTextTools) 
+library(tidyverse)
+data(NYTimes)
+as_tibble(NYTimes)
+
+```
+
+
+
+```{r}
+
+NYTimes <- NYTimes |>
+  # filter by date (only Jan 1 97 - Dec 31 2004)
+  
+  mutate(Year_str = str_sub(str_extract(Date, "\\D-\\d\\d")), 3, 4) |>
+  mutate(Year = str_sub(Year_str, 3, 4))
+  
+Clinton_Headlines <- NYTimes |>
+  filter(Year >= 97 | Year == "00") |>
+  filter(str_detect(Title, "Clinton")) |>
+  select(Date, Year, Title) |>
+  mutate(President = "Clinton")
+
+Clinton_Headlines
+
+Bush_Headlines <- NYTimes |>
+  filter(Year <= 04, Year != "00", Year != "05", Year != "06") |>
+  filter(str_detect(Title, "Bush")) |>
+  select(Date, Year, Title) |>
+  mutate(President = "Bush")
+
+Bush_Headlines
+
+Both_Headlines <- full_join(Clinton_Headlines, Bush_Headlines) |>
+  group_by(President, Year) |>
+  summarize(num_headlines = n())
+Both_Headlines
+
+#Join these two together to plot
+
+ggplot(Both_Headlines, aes(x = President, y = num_headlines, color = President)) + 
+  geom_col() + 
+  labs(
+    title = "Which President Had More Headlines During Their Term?",
+    y = "Number of Mentions in NYT Headlines During Term"
+  ) + 
+  theme_classic()
+  
+```
+

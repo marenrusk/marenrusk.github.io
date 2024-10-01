@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Maren Rusk">
+<meta name="dcterms.date" content="2024-09-18">
+<meta name="description" content="My analysis">
+
+<title>Maren Rusk - Text Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Maren Rusk</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data-viz" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data Viz</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data-viz">    
+        <li>
+    <a class="dropdown-item" href="./visualization1.html">
+ <span class="dropdown-text">Olympics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./visualization2.html">
+ <span class="dropdown-text">Cheese</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="./textanalysis.html" aria-current="page"> 
+<span class="menu-text">Text Analysis</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Text Analysis</h1>
+</div>
+
+<div>
+  <div class="description">
+    My analysis
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Maren Rusk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 18, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Here is my text analysis of NYT Headlines!</p>
+<p>Questions of Interest: 1. Which president (Bill Clinton or George W. Bush) were mentioned in more NYT Headlines during their respective presidential terms (Clinton 1997-2000 / Bush 2001-2004)?</p>
+<ul>
+<li>large difference</li>
+<li>is this because it was clinton’s 2nd term/ bush’s first term? or because more happened during bush’s term (9/11)? or was there more overall NYT coverage then?</li>
+</ul>
+<ol start="2" type="1">
+<li><p>Have headlines about the supreme court become more frequent over time (between 1996 and 2006)?</p></li>
+<li><p>Does the average length/number of the words in NYT headlines vary by month? year?</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RTextTools) </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(NYTimes)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(NYTimes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3,104 × 5
+   Article_ID Date      Title                                 Subject Topic.Code
+        &lt;int&gt; &lt;fct&gt;     &lt;fct&gt;                                 &lt;fct&gt;        &lt;int&gt;
+ 1      41246 1-Jan-96  Nation's Smaller Jails Struggle To C… Jails …         12
+ 2      41257 2-Jan-96  FEDERAL IMPASSE SADDLING STATES WITH… Federa…         20
+ 3      41268 3-Jan-96  Long, Costly Prelude Does Little To … Conten…         20
+ 4      41279 4-Jan-96  Top Leader of the Bosnian Serbs Now … Bosnia…         19
+ 5      41290 5-Jan-96  BATTLE OVER THE BUDGET: THE OVERVIEW… Battle…          1
+ 6      41302 7-Jan-96  South African Democracy Stumbles on … politi…         19
+ 7      41314 8-Jan-96  Among Economists, Little Fear on Def… econom…          1
+ 8      41333 10-Jan-96 BATTLE OVER THE BUDGET: THE OVERVIEW… budget…          1
+ 9      41344 11-Jan-96 High Court Is Cool To Census Change   census…         20
+10      41355 12-Jan-96 TURMOIL AT BARNEYS: THE DIFFICULTIES… barney…         15
+# ℹ 3,094 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>NYTimes <span class="ot">&lt;-</span> NYTimes <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter by date (only Jan 1 97 - Dec 31 2004)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year_str =</span> <span class="fu">str_sub</span>(<span class="fu">str_extract</span>(Date, <span class="st">"</span><span class="sc">\\</span><span class="st">D-</span><span class="sc">\\</span><span class="st">d</span><span class="sc">\\</span><span class="st">d"</span>)), <span class="dv">3</span>, <span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">str_sub</span>(Year_str, <span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>Clinton_Headlines <span class="ot">&lt;-</span> NYTimes <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">&gt;=</span> <span class="dv">97</span> <span class="sc">|</span> Year <span class="sc">==</span> <span class="st">"00"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(Title, <span class="st">"Clinton"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Date, Year, Title) <span class="sc">|&gt;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">President =</span> <span class="st">"Clinton"</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>Clinton_Headlines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Date Year
+1  12-Feb-97   97
+2  16-Mar-97   97
+3   9-Apr-97   97
+4   1-May-97   97
+5   7-Jun-97   97
+6  12-Jan-98   98
+7  24-May-98   98
+8   6-Jun-98   98
+9   2-Aug-98   98
+10 23-Aug-98   98
+11 16-Oct-98   98
+12 22-Oct-98   98
+13 27-Feb-99   99
+14 12-Mar-99   99
+15 15-Mar-99   99
+16 20-Mar-99   99
+17 17-Oct-99   99
+18 13-Jun-00   00
+19 17-Jul-00   00
+20 20-Jul-00   00
+                                                              Title President
+1                Clinton and Republican Leaders Agree on Five Goals   Clinton
+2                    Under Attack, Clinton Gets No Cover From Party   Clinton
+3                             Clinton and the Laws of (Slow) Motion   Clinton
+4    After Impasse, Senate Confirms Clinton's Choice for Labor Post   Clinton
+5                          Clintons Supported, But With an Asterisk   Clinton
+6       Clinton to Require State Efforts to Cut Drug Use in Prisons   Clinton
+7  A Top Clinton Donor Says Money Didn't Buy Approval on Satellites   Clinton
+8                     Radar Images Of Clinton's Jet Fall Off Screen   Clinton
+9                 In the Hamptons, High-Profile Parties for Clinton   Clinton
+10                                     Is Clinton's Legacy Clouded?   Clinton
+11                           Clinton Plea Opens Mideast Peace Talks   Clinton
+12                        Budget Bill Is Signed Into Law by Clinton   Clinton
+13         Clinton Defends His Policies In Kosovo, China and Mexico   Clinton
+14  In Vote Clinton Sought to Avoid, House Backs a Force for Kosovo   Clinton
+15           Clinton Wants to Strengthen U.S. Whistle-Blower Shield   Clinton
+16          One Consolation for Clinton: Democratic Donations Surge   Clinton
+17                                    Clinton Foreign Policy Shaken   Clinton
+18               Poll Finds New Opponent Fails to Lift Mrs. Clinton   Clinton
+19                      Clinton Voices Some Optimism On Peace Talks   Clinton
+20                                          Clinton's No. 2 Choices   Clinton</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Bush_Headlines <span class="ot">&lt;-</span> NYTimes <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">&lt;=</span> <span class="dv">04</span>, Year <span class="sc">!=</span> <span class="st">"00"</span>, Year <span class="sc">!=</span> <span class="st">"05"</span>, Year <span class="sc">!=</span> <span class="st">"06"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(Title, <span class="st">"Bush"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Date, Year, Title) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">President =</span> <span class="st">"Bush"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Bush_Headlines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Date Year
+1  12-Jan-01   01
+2  21-Jan-01   01
+3  28-Jan-01   01
+4  30-Jan-01   01
+5  17-Feb-01   01
+6   9-Mar-01   01
+7  10-Mar-01   01
+8  28-Mar-01   01
+9   7-Apr-01   01
+10 13-Apr-01   01
+11 22-Apr-01   01
+12  4-May-01   01
+13 18-May-01   01
+14 21-May-01   01
+15 23-May-01   01
+16 13-Jun-01   01
+17 17-Jun-01   01
+18 10-Jul-01   01
+19 11-Jul-01   01
+20 13-Jul-01   01
+21 23-Jul-01   01
+22 27-Jul-01   01
+23 14-Aug-01   01
+24 12-Sep-01   01
+25 16-Sep-01   01
+26 20-Sep-01   01
+27 28-Sep-01   01
+28  1-Oct-01   01
+29 19-Oct-01   01
+30  9-Nov-01   01
+31 14-Nov-01   01
+32 23-Dec-01   01
+33  9-Mar-02   02
+34 10-Jul-02   02
+35  2-Aug-02   02
+36 22-Sep-02   02
+37 29-Sep-02   02
+38  7-Nov-02   02
+39 14-Nov-02   02
+40  4-Dec-02   02
+41  3-Jan-03   03
+42  9-Jan-03   03
+43 16-Jan-03   03
+44 24-Jan-03   03
+45 28-Jan-03   03
+46 29-Jan-03   03
+47 14-May-03   03
+48 27-Jun-03   03
+49 18-Jul-03   03
+50  3-Aug-03   03
+51  5-Sep-03   03
+52  9-Dec-03   03
+53 13-Dec-03   03
+54 25-Jan-04   04
+55 17-Feb-04   04
+56  7-Mar-04   04
+57 20-Mar-04   04
+58 10-Apr-04   04
+59 29-Jun-04   04
+60  1-Aug-04   04
+61  9-Aug-04   04
+62 15-Aug-04   04
+63  9-Sep-04   04
+64 14-Sep-04   04
+65 21-Sep-04   04
+                                                                                                            Title
+1                                                            In A Swift Action, Bush Names Choice For Labor Dept.
+2  The Inauguration: The President; Bush, Taking Office, Calls For Civility, Compassion And 'Nation Of Character'
+3                                                          Bush's Transition Largely A Success, All Sides Suggest
+4                                                                             Bush Proposes Aid On Medicare Drugs
+5                                                            Bush Gives Mexico Backing On Drive Against Narcotics
+6                                                               Central Element Of Bush Tax Plan Passes The House
+7                                                            Bush Issues Order Preventing Strike By Airline Union
+8                                                            Bush Says Rebate Isn't A Substitute For His Tax Plan
+9             Collision With China: The Overview; Bush and Jiang Exchange Drafts Of a Letter Stating U.S. Regrets
+10                         Collision With China: The Overview; With Crew in U.S., Bush Sharpens Tone Toward China
+11                                                                Bush Links Trade With Democracy At Quebec Talks
+12                                                             Bush Will Modify Ban on New Roads For U.S. Forests
+13 The Energy Plan: The Overview; Bush, Pushing Energy Plan, Offers Scores Of Proposals To Find New Power Sources
+14                                                          Bush Pushes Role of Private Sector In Aiding The Poor
+15                                                        3 Bush Cabinet Members Drop Meetings With G.O.P. Donors
+16                                            Pushing His Missile Plan in Spain, Bush Calls Arms Treaty a 'Relic'
+17                        The President In Europe: The Talks; Putin Urges Bush Not To Act Alone On Missile Shield
+18                                                 Bush Seems to Ease His Stance On the Accountability of Schools
+19                                                                  Bush Drug Plan Calls for Using Discount Cards
+20                                                 Bush and Health Care Companies Promise Medicare Drug Discounts
+21                      Genoa Summit Meeting: The Overview; Bush and Putin Tie Antimissile Talks To Big Arms Cuts
+22                                                                     Bush Says Plan For Immigrants Could Expand
+23                                                Bush Says He Will Veto Any Bill Broadening His Stem Cell Policy
+24                                    A Day of Terror: The President; A Somber Bush Says Terrorism Cannot Prevail
+25       After The Attacks: The Trail; Bush Tells The Military To 'Get Ready'; Broader Spy Powers Gaining Support
+26                                 A Nation Challenged: Washington; Bush's Advisers Split on Scope Of Retaliation
+27                      A Nation Challenged: The President; Bush to Increase Federal Role in Security at Airports
+28                                     A Nation Challenged: The Rebels; Bush Approves Covert Aid for Taliban Foes
+29                                                                               First Meeting for Bush and Jiang
+30                           A Nation Challenged: The President; Bush Seeks New Volunteer Force for Civil Defense
+31                The Bush-Putin Summit: The Accord; Bush and Putin Agree to Reduce Stockpile of Nuclear Warheads
+32                         A Nation Challenged: Foreign Policy Team; Wartime Forges A United Front For Bush Aides
+33                                            Bush Is Still Winning War There, But He Begins to Lose Battles Here
+34                                                                         Bush, on Wall St., Offers Tough Stance
+35                                                                    Senate Grants Bush Authority On Trade Deals
+36                                                        Bush's Push on Iraq at U.N.: Headway, Then New Barriers
+37                                                      : Nancy Reagan, in a Whisper, Fights Bush Over Stem Cells
+38                                                                        Challenges for Bush: Economy and S.E.C.
+39                                                                      Annan Presses Bush to Avoid A Rush to War
+40                                                                     Bush Restoring Cash Bonuses For Appointees
+41                                                       Government Openness at Issue As Bush Holds On to Records
+42                                                        Bush's Plan Taxes Certain Dividends, Fine Print Reveals
+43                                                                 Bush Aide Sees Deficit in 2003 Of $200 Billion
+44                THREATS AND RESPONSES: THE CONTINENT; \nTo Some in Europe, The Major Problem Is Bush the Cowboy
+45                                               THREATS AND RESPONSES: NEWS ANALYSIS; \nA Critical Test for Bush
+46                                                    STATE OF THE UNION: NEWS ANALYSIS; \nBush's Twin Challenges
+47                                   AFTEREFFECTS: THE ATTACK; \nBush Condemns Saudi Blasts; 7 Americans Are Dead
+48                                                 Bush Calls for Changes in Africa To End Wars and Promote Trade
+49                          AFTER THE WAR: C.I.A. UPROAR; \nNew Details Emerge On Uranium Claim And Bush's Speech
+50                                                                    Hispanics Back Big Government And Bush, Too
+51                                                      In First Encounter, Democrats Hit Bush Over Jobs and Iraq
+52                                                                  Bush Signs Law To Cover Drugs For the Elderly
+53                              A REGION INFLAMED: RECONSTRUCTION; \nBush Sees Need For Repayment If Fee Was High
+54                                                        Many Are Surprised By Bold Decisions Of the Bush F.D.A.
+55                                                                       Arabs in U.S. Raising Money To Back Bush
+56                                                                        Bush Won't Pull Ads Showing 9/11 Images
+57                                                                        Bush Urges Nations To Help Rebuild Iraq
+58                                                                        As Bush Ends Money Drive, Kerry Goes On
+59                                                      Bush's Rating Falls To Its Lowest Point, New Survey Finds
+60                                                                      Bush Planning August Attack Against Kerry
+61                                                      Churches See an Election Role And Spread the Word on Bush
+62                                                                                          Bush Backs Troop Plan
+63                                                            Documents Suggest Guard Gave Bush Special Treatment
+64                                                                   Bush's Record: New Priorities In Environment
+65                                                  In Harshest Critique Yet, Kerry Attacks Bush Over War in Iraq
+   President
+1       Bush
+2       Bush
+3       Bush
+4       Bush
+5       Bush
+6       Bush
+7       Bush
+8       Bush
+9       Bush
+10      Bush
+11      Bush
+12      Bush
+13      Bush
+14      Bush
+15      Bush
+16      Bush
+17      Bush
+18      Bush
+19      Bush
+20      Bush
+21      Bush
+22      Bush
+23      Bush
+24      Bush
+25      Bush
+26      Bush
+27      Bush
+28      Bush
+29      Bush
+30      Bush
+31      Bush
+32      Bush
+33      Bush
+34      Bush
+35      Bush
+36      Bush
+37      Bush
+38      Bush
+39      Bush
+40      Bush
+41      Bush
+42      Bush
+43      Bush
+44      Bush
+45      Bush
+46      Bush
+47      Bush
+48      Bush
+49      Bush
+50      Bush
+51      Bush
+52      Bush
+53      Bush
+54      Bush
+55      Bush
+56      Bush
+57      Bush
+58      Bush
+59      Bush
+60      Bush
+61      Bush
+62      Bush
+63      Bush
+64      Bush
+65      Bush</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Both_Headlines <span class="ot">&lt;-</span> <span class="fu">full_join</span>(Clinton_Headlines, Bush_Headlines) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(President, Year) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_headlines =</span> <span class="fu">n</span>())</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Both_Headlines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 3
+# Groups:   President [2]
+  President Year  num_headlines
+  &lt;chr&gt;     &lt;chr&gt;         &lt;int&gt;
+1 Bush      01               32
+2 Bush      02                8
+3 Bush      03               13
+4 Bush      04               12
+5 Clinton   00                3
+6 Clinton   97                5
+7 Clinton   98                7
+8 Clinton   99                5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Join these two together to plot</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Both_Headlines, <span class="fu">aes</span>(<span class="at">x =</span> President, <span class="at">y =</span> num_headlines, <span class="at">color =</span> President)) <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Which President Had More Headlines During Their Term?"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Mentions in NYT Headlines During Term"</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="textanalysis_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
