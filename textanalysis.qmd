@@ -1,6 +1,6 @@
 ---
 title: "Text Analysis"
-description: My analysis
+description: Analysis of New York Times Headlines Data from RTextTools Package
 author: Maren Rusk
 date: September 18, 2024
 format: html
@@ -9,68 +9,91 @@ execute:
   message: false
 ---
 
-Here is my text analysis of NYT Headlines!
-
-Questions of Interest:
-1. Which president (Bill Clinton or George W. Bush) were mentioned in more NYT Headlines during their respective presidential terms (Clinton 1997-2000 / Bush 2001-2004)?
-
-- large difference
-- is this because it was clinton's 2nd term/ bush's first term? or because more happened during bush's term (9/11)? or was there more overall NYT coverage then?
-
-2. Have headlines about the supreme court become more frequent over time (between 1996 and 2006)?
-
-3. Does the average length/number of the words in NYT headlines vary by month? year?
-
+Question 1: Which president (Bill Clinton or George W. Bush) was mentioned in more NYT Headlines during their respective presidential terms (Clinton 1997-2000 / Bush 2001-2004)?
 
 
 ```{r}
+#| echo: false
 library(RTextTools) 
 library(tidyverse)
 data(NYTimes)
-as_tibble(NYTimes)
 
 ```
 
 
 
 ```{r}
-
 NYTimes <- NYTimes |>
-  # filter by date (only Jan 1 97 - Dec 31 2004)
-  
-  mutate(Year_str = str_sub(str_extract(Date, "\\D-\\d\\d")), 3, 4) |>
+ 
+  # create a column for year using date
+  mutate(Year_str = str_extract(Date, "\\D-\\d\\d")) |>
   mutate(Year = str_sub(Year_str, 3, 4))
-  
+
+# Headlines with "Clinton" between 1997 and 2000  
 Clinton_Headlines <- NYTimes |>
   filter(Year >= 97 | Year == "00") |>
   filter(str_detect(Title, "Clinton")) |>
   select(Date, Year, Title) |>
   mutate(President = "Clinton")
 
-Clinton_Headlines
-
+# Headlines with "Bush" between 2001 and 2004
 Bush_Headlines <- NYTimes |>
   filter(Year <= 04, Year != "00", Year != "05", Year != "06") |>
   filter(str_detect(Title, "Bush")) |>
   select(Date, Year, Title) |>
   mutate(President = "Bush")
 
-Bush_Headlines
-
+#Join these two together to plot
 Both_Headlines <- full_join(Clinton_Headlines, Bush_Headlines) |>
   group_by(President, Year) |>
   summarize(num_headlines = n())
-Both_Headlines
 
-#Join these two together to plot
-
-ggplot(Both_Headlines, aes(x = President, y = num_headlines, color = President)) + 
+# bar chart
+ggplot(Both_Headlines, aes(x = fct_rev(President), y = num_headlines, 
+                           fill = fct_relevel(Year, c("97", "98","99", "00", "01", "02", "03", "04")))) + 
   geom_col() + 
+  scale_x_discrete(labels=c('Clinton (1997-2000)', 'Bush (2001-2004)')) + 
   labs(
-    title = "Which President Had More Headlines During Their Term?",
-    y = "Number of Mentions in NYT Headlines During Term"
+    title = "Clinton v Bush: Which President Had More Headlines During Their Term?",
+    x = "President",
+    y = "Number of Mentions in NYT Headlines During Term",
+    fill = "Year"
   ) + 
   theme_classic()
   
 ```
+This plot shows the number of New York Times headlines that each president was mentioned in during their consecutive terms (Bill Clinton 1997-2000 and George W. Bush 2001-2004) by year. Based on the plot, there is clearly a large difference in both the total number of headlines for each president, where Bush had a total of 65 headline mentions between 2001 and 2004 and Clinton only had 20. There does not seem to be a consistent pattern of increase or decrease of headlines by year during a presidential term. Notably, Bush had a huge surge of headlines in 2001 which is likely due to the influx of New York Times articles around the crisis of 9/11. It would be interesting to look at whether there was also a large difference in the total number of New York Times articles in this data set between 1997-2000 and 2001-2004 that might confound these results.
+
+
+
+Question 2: Does the typical number of words per headline vary by month? Does this relationship change depending on
+whether the headline contains punctuation?
+
+```{r}
+
+NYTimesWM <- NYTimes |>
+  # extract month from date as new variable
+  mutate(Month = str_extract(Date, "(?<=-).+(?=-)")) |>
+  mutate(word_list = str_split(Title, " ")) |>
+  mutate(num_words = lengths(word_list)) |>
+  # variable for whether headline contains punctuation
+  mutate(Punctuation = grepl("[[:punct:]]", Title))
+
+
+# boxplot  
+ggplot(NYTimesWM, aes(x = fct_relevel(Month, c('Jan', 'Feb', 'Mar',
+                                               'Apr', 'May', 'Jun',
+                                               'Jul', 'Aug', 'Sep',
+                                               'Oct', 'Nov', 'Dec')), 
+                      y = num_words, color = Punctuation)) + 
+  geom_boxplot() + 
+  labs(
+    title = "Length of New York Times Headlines by Month 
+    With and Without Punctuation Between 1996 and 2006",
+    x = "Month",
+    y = "Number of Words Per Headline"
+  )
+
+```
+This plot shows the distributions of the number of words per headline for each month for headlines with and without punctuation. By month, the distributions do not show a clear trend, but the ranges for February and November with punctuation appear to be the largest overall excluding outliers, while May has both the longest headline (largest outlier) and one of the shortest, at one word. However, looking at the comparison between headlines with punctuation and headlines without punctuation, the ranges for headlines with punctuation are longer for every single month, and there are also far more outliers on the high end for this category. In fact, the upper quartile for headlines with punctuation is a larger number of words for every month except August, which is even with no punctuation. These results are understandable considering that longer sentences are more likely to need punctuation in order to have proper grammar. The months with the largest difference between punctuation and no punctuation in median number of words per headline are September and November.
 
