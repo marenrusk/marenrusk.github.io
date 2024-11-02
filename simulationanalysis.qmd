@@ -1,0 +1,16 @@
+---
+title: "Simulation Analysis"
+description: Analysis of 
+author: Maren Rusk
+date: November 6, 2024
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+library(MASS)
+
+```
+
