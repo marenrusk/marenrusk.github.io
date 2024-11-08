@@ -1,6 +1,6 @@
 ---
 title: "Simulation Analysis"
-description: Analysis of 
+description: Are young females less likely to see their own gender as smart?
 author: Maren Rusk
 date: November 6, 2024
 format: html
@@ -10,7 +10,65 @@ execute:
 ---
 
 ```{r}
-library(MASS)
+library(tidyverse)
+library(openintro)
+```
+
+This data, [Gender Stereotypes in 5-7 year old Children]{.underline}, was found in the R open intro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a "smart" or "nice" individual in an image. The *stereotype* variable gives the proportion of trials where each child chose a gender target that matched their own gender. I will focus specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, and compare results between the male and female genders.
+
+My research question: Are young females less likely to identify adults of their own gender as smart than young males?
+
+```{r}
+
+gender_stereo <- children_gender_stereo[["2"]]
+
+stereo_obs <- gender_stereo |>
+  filter(trait == "smart", target == "adults") |>
+  group_by(gender) |>
+  summarize(mean_stereotype = mean(stereotype)) |>
+  mutate(difference = mean_stereotype[gender == "male"] - mean_stereotype[gender == "female"]) |>
+  pull(difference)
+
+stereo_obs
 
 ```
+
+Ho: μfemale = μmale (μmale - μfemale = 0) Ha: μmale - μfemale \> 0
+
+```{r}
+simulate_choices <- function(rep, num_tests) {
+  
+  female_choices <- sample(c(0, 0.25, 0.5, 0.75, 1), size = num_tests, replace = TRUE)
+  male_choices <- sample(c(0, 0.25, 0.5, 0.75, 1), size = num_tests, replace = TRUE)
+  return(mean(male_choices) - mean(female_choices))
+}
+set.seed(47)
+num_exper <- 5000
+distribution <- map_dbl(1:num_exper, simulate_choices, num_tests = 144)
+
+
+# p-value
+sum(distribution >= stereo_obs) / num_exper
+```
+
+```{r}
+# visualize null sampling distribution
+distribution |>
+  data.frame() |>
+  ggplot(aes(x = distribution)) +
+  geom_histogram() +
+  geom_vline(xintercept = stereo_obs, color = "red") + 
+  labs(
+    title = "Sampling Distribution when Ho is True",
+    subtitle = "aka no difference between gender picks",
+    x = "mean difference in proportion of stereotype by gender"
+  )
+```
+
+This plot displays the null sampling distribution of 
+
+Source:
+
+Bian L, Leslie SJ, Cimpian A. 2017. "Gender stereotypes about intellectual ability emerge early and influence children's interests". Science 355:6323 (389-391). https://www.science.org/doi/10.1126/science.aah6524.
+
 
