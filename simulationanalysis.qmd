@@ -2,7 +2,7 @@
 title: "Simulation Analysis"
 description: Are young females less likely to see their own gender as smart?
 author: Maren Rusk
-date: November 6, 2024
+date: November 8, 2024
 format: html
 execute:
   warning: false
@@ -14,14 +14,18 @@ library(tidyverse)
 library(openintro)
 ```
 
-This data, [Gender Stereotypes in 5-7 year old Children]{.underline}, was found in the R open intro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a "smart" or "nice" individual in an image. The *stereotype* variable gives the proportion of trials where each child chose a gender target that matched their own gender. I will focus specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, and compare results between the male and female genders.
-
-My research question: Are young females less likely to identify adults of their own gender as smart than young males?
+In this analysis, I will conduct a permutation test to attempt to answer the research question: Are young females less likely to identify adults of their own gender as smart than young males are? The data for this test, [Gender Stereotypes in 5-7 year old Children]{.underline}, was found in the R openintro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a "smart" or "nice" individual in an image. The *stereotype* variable gives the proportion of trials where each child chose a gender target that matched their own gender. Focusing specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, I will test for a difference in this variable between the male and female genders.
 
 ```{r}
 
 gender_stereo <- children_gender_stereo[["2"]]
+head(gender_stereo)
 
+```
+
+
+```{r}
+# wrangle data fo get difference in means between male/female
 stereo_obs <- gender_stereo |>
   filter(trait == "smart", target == "adults") |>
   group_by(gender) |>
@@ -33,26 +37,27 @@ stereo_obs
 
 ```
 
-Ho: μfemale = μmale (μmale - μfemale = 0) Ha: μmale - μfemale \> 0
-
 ```{r}
+# function to produce one sample experiment under the null hypothesis
 simulate_choices <- function(rep, num_tests) {
   
   female_choices <- sample(c(0, 0.25, 0.5, 0.75, 1), size = num_tests, replace = TRUE)
   male_choices <- sample(c(0, 0.25, 0.5, 0.75, 1), size = num_tests, replace = TRUE)
   return(mean(male_choices) - mean(female_choices))
 }
+
+# simulate many experiments
 set.seed(47)
 num_exper <- 5000
 distribution <- map_dbl(1:num_exper, simulate_choices, num_tests = 144)
 
 
-# p-value
+# calculate p-value
 sum(distribution >= stereo_obs) / num_exper
 ```
 
 ```{r}
-# visualize null sampling distribution
+# visualize null sampling distribution with p-value
 distribution |>
   data.frame() |>
   ggplot(aes(x = distribution)) +
@@ -65,10 +70,20 @@ distribution |>
   )
 ```
 
-This plot displays the null sampling distribution of 
+This plot displays a histogram of sample difference in means calculated under the assumption that there is no inherent difference between how often a male or female will pick their own gender to be smarter. The red line represents the observed mean difference stereotype proportion between the male and female genders from the data, 0.0972. The histogram allows for visualization of the above calculated p-value of 0.013, meaning that only 1.3% off the 5000 samples had a difference in means (male - female) greater than 0.0972.
 
-Source:
+[Process]{.underline}
+
+I began this test with the null hypothesis, Ho, that the difference between male and female stereotype was 0, and the alternative hypothesis, Ha, that the difference between male and female stereotype was greater than 0:
+
+Ho: μmale - μfemale = 0, Ha: μmale - μfemale \> 0
+
+I wrangled my dataset to find the mean stereotype proportion for all females and all males in the study, and ultimately the difference in these means (0.0972). Then, I created a null sampling distribution under the assumption of the null hypothesis by simulating 5000 experiments with equal probabilities of any of the proportions observed in the dataset for each males and females, and finding the difference in male and female means for each experiment. I used this distribution to calculate a p-value by finding the percent of experiments where the difference means (male - female) was greater than the observed difference in means from the dataset.
+
+[Results]{.underline}
+
+I found a p-value of 0.013, which is low enough to reject the null hypothesis. Thus, this dataset shows statistically significant evidence that 5-7 year old males are more likely to select adults of their own gender to be smart than 5-7 year old females are.
+
+[Data Source]{.underline}
 
 Bian L, Leslie SJ, Cimpian A. 2017. "Gender stereotypes about intellectual ability emerge early and influence children's interests". Science 355:6323 (389-391). https://www.science.org/doi/10.1126/science.aah6524.
-
-
