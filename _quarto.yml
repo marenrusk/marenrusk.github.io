@@ -17,6 +17,7 @@ website:
            href: visualization2.html
       - href: textanalysis.qmd
       - href: simulationanalysis.qmd
+      - href: sqldata.qmd
            
 
 format:

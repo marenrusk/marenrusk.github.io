@@ -1,0 +1,147 @@
+---
+title: "SQL Analysis"
+description: Plotting Ear Measurements from WAI Database
+author: Maren Rusk
+date: November 26, 2024
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+Project Description:
+
+
+
+```{r}
+library(tidyverse)
+library(RMariaDB)
+con_wai <- dbConnect(
+  MariaDB(), host = "scidb.smith.edu",
+  user = "waiuser", password = "smith_waiDB", 
+  dbname = "wai"
+)
+
+Measurements <- tbl(con_wai, "Measurements")
+PI_Info <- tbl(con_wai, "PI_Info")
+Subjects <- tbl(con_wai, "Subjects")
+
+# collect(Measurements)
+
+```
+
+```{sql}
+#| connection: con_wai
+
+SELECT *
+FROM Measurements
+
+LIMIT 900000, 30;
+```
+Calculating Mean Absorbance:
+
+For each study...
+  for each frequency...
+    average absorption over all unique ears in study
+    (aka sum absorption / num ears for each frequency) -> in select
+    so maybe group by identifier, frequency? 
+
+More Questions:
+- how do i make scale of x axis
+
+
+```{sql}
+#| connection: con_wai
+#| output.var: "ears"
+
+
+SELECT Measurements.Identifier,
+        AVG(Absorbance) AS Mean_Absorbance,
+        Frequency,
+        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", COUNT(DISTINCT SubjectNumber, Ear), " ; ", Instrument) AS Label
+        
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier
+WHERE (Measurements.Identifier = "Abur_2014" OR
+      Measurements.Identifier = "Feeney_2017" OR
+      Measurements.Identifier = "Groon_2015" OR
+      Measurements.Identifier = "Lewis_2015" OR
+      Measurements.Identifier = "Liu_2008" OR
+      Measurements.Identifier = "Rosowski_2012" OR
+      Measurements.Identifier = "Shahnaz_2006" OR
+      Measurements.Identifier = "Shaver_2013" OR
+      Measurements.Identifier = "Sun_2016" OR
+      Measurements.Identifier = "Voss_1994" OR
+      Measurements.Identifier = "Voss_2010" OR
+      Measurements.Identifier = "Werner_2010") AND
+      Measurements.Frequency > 200 AND Measurements.Frequency < 8000
+GROUP BY Measurements.Identifier, Frequency, Instrument;
+
+```
+
+#| fig-width: 
+
+Plotting:
+```{r}
+
+
+ears |>
+  ggplot(aes(x = Frequency, y = Mean_Absorbance, color = Label)) +
+  geom_line() +
+  labs(
+    x = "Frequency(Hz)",
+    y = "Mean Absorbance",
+    color = NULL
+  ) +
+  scale_x_log10() +
+  theme(
+    legend.position = c(0.1, 0.83),
+    legend.justificiation = c(0, 1),
+    legend.background = element_rect(
+      color = "black",
+      size = 0.5,
+      fill = "white"
+    ),
+    legend.key.height = unit(3.5, "mm")
+  )
+
+```
+
+
+ at end
+
+
+Part 2: Sun_2023?
+
+```{sql}
+#| connection: con_wai
+
+SELECT *
+FROM Subjects
+WHERE Identifier = "Sun_2023"
+LIMIT 3500, 500;
+```
+
+```{sql}
+#| connection: con_wai
+
+
+SELECT Measurements.Identifier,
+        AVG(Absorbance) AS Mean_Absorbance,
+        Frequency,
+        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", COUNT(DISTINCT Measurements.SubjectNumber, Ear), " ; ", Instrument) AS Label
+        
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier 
+JOIN Subjects ON Subjects.SubjectNumber = Measurements.SubjectNumber
+WHERE Measurements.Identifier = "Sun_2023" AND
+      Measurements.Frequency > 200 AND Measurements.Frequency < 8000
+GROUP BY Measurements.Identifier, Frequency, Instrument 
+LIMIT 0, 20;
+```
+
+
+```{r}
+dbDisconnect(con_wai, shutdown = TRUE)
+```
+
