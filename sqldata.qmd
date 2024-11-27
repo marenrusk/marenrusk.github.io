@@ -9,9 +9,7 @@ execute:
   message: false
 ---
 
-Project Description:
-
-
+My goal for this analysis is to explore large amounts of wideband acoustic immitance auditory data using SQL. To accomplish this, I will query the WAI Database and build a dataset that can be used to recreate the Mean Absorbance vs. Frequency figure from Voss's 2020 article on wideband acoustic immitance. I will use three tables from the database: Measurements - a table containing WAI measurements for each subject and session from several different studies, PI_Info - a table holding logistic details about each study, and Subjects - a table with demographic and other information about each subject across all studies. Using SQL, I will join parts of these tables to compile information from 12 different studies, and plot the mean absorption vs frequency results for each, as in Figure 1 (Voss 2020). Then, I will inspect the 2023 WAI study by Sun et al., and use a similar process to plot and determine discrepancies in mean absorbance by age.
 
 ```{r}
 library(tidyverse)
@@ -25,41 +23,17 @@ con_wai <- dbConnect(
 Measurements <- tbl(con_wai, "Measurements")
 PI_Info <- tbl(con_wai, "PI_Info")
 Subjects <- tbl(con_wai, "Subjects")
-
-# collect(Measurements)
-
 ```
-
-```{sql}
-#| connection: con_wai
-
-SELECT *
-FROM Measurements
-
-LIMIT 900000, 30;
-```
-Calculating Mean Absorbance:
-
-For each study...
-  for each frequency...
-    average absorption over all unique ears in study
-    (aka sum absorption / num ears for each frequency) -> in select
-    so maybe group by identifier, frequency? 
-
-More Questions:
-- how do i make scale of x axis
-
 
 ```{sql}
 #| connection: con_wai
 #| output.var: "ears"
 
-
 SELECT Measurements.Identifier,
         AVG(Absorbance) AS Mean_Absorbance,
         Frequency,
-        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", COUNT(DISTINCT SubjectNumber, Ear), " ; ", Instrument) AS Label
-        
+        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", 
+        COUNT(DISTINCT SubjectNumber, Ear), " ; ", Instrument) AS Label
 FROM Measurements
 JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier
 WHERE (Measurements.Identifier = "Abur_2014" OR
@@ -79,39 +53,64 @@ GROUP BY Measurements.Identifier, Frequency, Instrument;
 
 ```
 
-#| fig-width: 
-
-Plotting:
 ```{r}
+head(ears)
+```
 
+This table displays the mean measured absorbance for ears at each frequency, separated by study, using information from the Measurements and PI_Info tables. It also contains information to go in the legend of the plot, including the instrument used, number of ears, year, and authors for each study.
+
+**Plotting The Data**
+
+```{r}
+library(scales)
 
 ears |>
   ggplot(aes(x = Frequency, y = Mean_Absorbance, color = Label)) +
   geom_line() +
+  xlim(200, 8000) +
+  ylim(0, 1) +
   labs(
+    title = "Mean absorbance from each publication in WAI database",
     x = "Frequency(Hz)",
     y = "Mean Absorbance",
     color = NULL
   ) +
-  scale_x_log10() +
+  scale_x_log10(
+    limits = c(200, 8000),
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    breaks = seq(0, 1, 0.2)
+  ) +
+  theme_bw() +
   theme(
-    legend.position = c(0.1, 0.83),
-    legend.justificiation = c(0, 1),
+    plot.background = element_rect(
+      fill = "grey90", 
+      color = "grey90", 
+      size = 30),
+    legend.position = c(0.01, 0.99),
+    legend.justification = c(0, 1),
     legend.background = element_rect(
       color = "black",
-      size = 0.5,
+      size = 0.3,
       fill = "white"
     ),
-    legend.key.height = unit(3.5, "mm")
+    legend.text = element_text(size = 7),
+    legend.key.height = unit(0.15, "mm"),
+    legend.key = element_rect(size = 0.1),
+    legend.key.size = unit(1, "cm"),
+    aspect.ratio = 0.8,
+    text = element_text(face = "bold"),
+    plot.title = element_text(hjust = 0.5),
+    plot.margin = margin(12, 12, 12, 12)
   )
 
 ```
 
+The above graph displays the mean percent absorbance per frequency (in hertz), from each study's findings, separated by color. Each line appears to follow a similar trend, with low absorbances at low frequencies, increasing to a maximum absorbancy between 2000 and 4000 hz, before dropping back down to low absorbance levels at higher frequencies. Notably, in my plot the Feeney et al. study has much lower absorbances between 1000 and 3000 hz frequencies than all of the other observed studies. This contrast does not appear in Voss' version of the plot.
 
- at end
-
-
-Part 2: Sun_2023?
+**Part 2: Examining Sun's 2023 Study for Absorption Differences by Age**
 
 ```{sql}
 #| connection: con_wai
@@ -119,29 +118,107 @@ Part 2: Sun_2023?
 SELECT *
 FROM Subjects
 WHERE Identifier = "Sun_2023"
-LIMIT 3500, 500;
+LIMIT 3500, 20;
 ```
+
+Shown above is an example of 20 rows of data from Sun's study, taken from the Subjects table.
 
 ```{sql}
 #| connection: con_wai
-
+#| output.var: demo_ears
 
 SELECT Measurements.Identifier,
         AVG(Absorbance) AS Mean_Absorbance,
         Frequency,
-        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", COUNT(DISTINCT Measurements.SubjectNumber, Ear), " ; ", Instrument) AS Label
+        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", COUNT(DISTINCT Measurements.SubjectNumber, Ear), " ; ", Instrument) AS Label,
+        FLOOR(Age / 10) AS Age_Group
         
 FROM Measurements
 JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier 
 JOIN Subjects ON Subjects.SubjectNumber = Measurements.SubjectNumber
 WHERE Measurements.Identifier = "Sun_2023" AND
       Measurements.Frequency > 200 AND Measurements.Frequency < 8000
-GROUP BY Measurements.Identifier, Frequency, Instrument 
-LIMIT 0, 20;
+GROUP BY Age_Group, Frequency, Instrument;
 ```
 
+```{r}
+head(demo_ears)
+```
+
+This table shows the mean measured absorbance for ears at each frequency, grouped by the age range of the subject (age group is the subject's age, divided by 10).
+
+```{r}
+
+demo_ears <- demo_ears |> 
+  mutate(Age_Label = case_when(
+    Age_Group == 0 ~ "0-9 years",
+    Age_Group == 1 ~ "10-19 years",
+    Age_Group == 2 ~ "20-29 years",
+    Age_Group == 3 ~ "30-39 years",
+    Age_Group == 4 ~ "40-49 years",
+    Age_Group == 5 ~ "50-59 years",
+    Age_Group == 6 ~ "60-69 years",
+    Age_Group == 7 ~ "70-79 years",
+    Age_Group == 8 ~ "80-89 years"
+  ))
+
+demo_ears |>
+  ggplot(aes(x = Frequency, y = Mean_Absorbance, color = Age_Label)) +
+  geom_line() +
+  xlim(200, 8000) +
+  ylim(0, 1) +
+  labs(
+    title = "Mean absorbance by age group in WAI database Sun et al. 2023 study",
+    x = "Frequency(Hz)",
+    y = "Mean Absorbance",
+    color = NULL
+  ) +
+  scale_x_log10(
+    limits = c(200, 8000),
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    breaks = seq(0, 1, 0.2)
+  ) +
+  theme_bw() +
+  theme(
+    plot.background = element_rect(
+      fill = "grey90", 
+      color = "grey90", 
+      size = 30),
+    legend.position = c(0.01, 0.99),
+    legend.justification = c(0, 1),
+    legend.background = element_rect(
+      color = "black",
+      size = 0.3,
+      fill = "white"
+    ),
+    legend.text = element_text(size = 7),
+    legend.key.height = unit(0.15, "mm"),
+    legend.key = element_rect(size = 0.1),
+    legend.key.size = unit(1, "cm"),
+    aspect.ratio = 0.8,
+    text = element_text(face = "bold"),
+    plot.title = element_text(hjust = 0.5),
+    plot.margin = margin(30, 70, 30, 40)
+  )
+```
+
+This plot is similar to the first but focused in on the Sun study exclusively, with mean absorbance levels colored by age group. Accordingly, we can see the trend of absorbance increasing with frequency until about 1000 hz. Sun's study evens out a bit more with maxes somewhat spread out between 1000 and 4000hz and then dropping back down at higher frequencies. According to this plot, the only age group that clearly breaks this trend is the oldest group, 80-89-year-old ears with generally much lower absorbances and a max right near 4000hz. Interstingly, the 70-79 year age group does not show any of this decline, and in fact holds some of the highest mean absorbances across frequencies.
+
+**Process/Discussion**
+
+After gathering data, I began by selecting the studies I wanted to work with, and finding variables I needed to include across tables. All of the label and measurement information for the first plot was contained between the PI_Info and Measurements tables, so I joined selected variables from these and grouped by study and frequency in order to obtain a summarized mean absorbance across each frequency per study to plot. I was then able to recreate Voss' s figure using ggplot. There were some limitations to this, as some of the numbers in the data were slightly different from what was shown in Voss's plot. For instance, the number of ears in Werner's 2010 study was listed as N=267 in her plot, where my plot used 962 ears.
+
+After duplicating this plot as closely as possible, I used similar data wrangling to obtain a table and plot of mean absorbance data by age from the study by Sun et al., 2023. I chose to group age by 10 years to simplify and increase readability. I modeled the plot similarly to Voss's Figure 1, and it showed a sizable difference in shape and height of the curve for mean absorbances of 80-89 year old ears.
+
+**Source**
+
+Voss SE. Resource Review. Ear Hear. 2019 Nov/Dec;40(6):1481. doi: 10.1097/AUD.0000000000000790. PMID: 31651606; PMCID: PMC7093226.
+
+doi.org/10.35482/egr.001.2022
 
 ```{r}
 dbDisconnect(con_wai, shutdown = TRUE)
 ```
-
