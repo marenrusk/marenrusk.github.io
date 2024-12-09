@@ -9,7 +9,7 @@ execute:
   message: false
 ---
 
-In this project, I will use data from the June 2024 "Cheese" folder from the TidyTuesday github repository. This data was originally scraped from cheese.com, which contains information on 2,041 specialty cheeses from over 74 countries across the world. The dataset contains many cheeses, along with the animal and region they come from, and information about the color, texture, rind type, flavor, and aroma of the cheese.
+In this project, I will use data from the June 2024 "Cheese" folder from the TidyTuesday github repository. This data was originally scraped from `cheese.com`, which contains information on 2,041 specialty cheeses from over 74 countries across the world. The dataset contains many cheeses, along with the animal and region they come from, and information about the color, texture, rind type, flavor, and aroma of the cheese.
 
 I have looked specifically into rind type and color, in order to explore which rind types are most common, and how this relates to the color of the cheese, using visualizations.
 
@@ -54,9 +54,10 @@ cheeses |>
   geom_bar() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
 **Analysis:**
 
-This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count leads me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot. 
+This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count leads me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot.
 
 ```{r}
 cheeses |>

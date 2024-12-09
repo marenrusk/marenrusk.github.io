@@ -1,6 +1,6 @@
 ---
 title: "Permutation Tests"
-description: Are young females less likely to see their own gender as smart?
+description: Are young females less likely to view their own gender as smart?
 author: Maren Rusk
 date: November 8, 2024
 format: html
@@ -52,6 +52,8 @@ stereo_obs
 
 ```
 
+
+Next, I shuffle the data and create a null sampling distribution, in order to determine whether this dataset contains statistically significant evidence of a stereotype difference.
 
 ```{r, fig.alt="This histogram displays a null sampling distribution of differences between stereotype proportion by gender using randomized data. The x-axis represents the mean difference in proportion of stereotype by gender, and the y-axis represents count. The shape of the histogram resembles a normal curve, with a slight gap at x = 0. A red vertical line intercepts the x-axis at x = 0.0972, the observed mean difference from the actual experimental data."}
 

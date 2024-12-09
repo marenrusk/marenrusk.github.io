@@ -124,10 +124,10 @@ The above graph displays the mean percent absorbance per frequency (in hertz), f
 SELECT *
 FROM Subjects
 WHERE Identifier = "Sun_2023"
-LIMIT 3500, 20;
+LIMIT 3500, 10;
 ```
 
-Shown above is an example of 20 rows of data from Sun's study, taken from the Subjects table.
+Shown above is an example of 10 rows of data from Sun's study, taken from the Subjects table.
 
 ```{sql}
 #| connection: con_wai

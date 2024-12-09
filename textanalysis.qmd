@@ -9,10 +9,9 @@ execute:
   message: false
 ---
 
-For this project, I will look at data on New York Times headlines from the RTextTools package. This dataset was originally compiled by Professor Amber E. Boydstun at the University of California, Davis. It contains labeled headlines from New York Times articles between 1996 and 2006, including the date, title, and subject. The original information on this dataset can be found at http://www.amber-boydstun.com/supplementary-information-for-making-the-news.html.
+For this project, I will look at data on New York Times headlines from the RTextTools package. This dataset was originally compiled by Professor Amber E. Boydstun at the University of California, Davis. It contains labeled headlines from New York Times articles between 1996 and 2006, including the date, title, and subject. The original information on this dataset can be found at `http://www.amber-boydstun.com/supplementary-information-for-making-the-news.html`.
 
 An example of the data is shown below:
-
 
 ```{r}
 #| echo: false
@@ -25,7 +24,6 @@ head(NYTimes)
 ```
 
 Scanning the headline subjects, I noticed a large number of headlines about both Bill Clinton and George W. Bush, so I decided to examine which president was mentioned in more NYT Headlines during their respective presidential terms (Clinton 1997-2000 / Bush 2001-2004). To do this, I used regular expressions and string functions to wrangle the data into useful information that could be plotted.
-
 
 ```{r, fig.alt="This col plot shows the differences in total NYT headline mentions between George W. Bush and Bill Clinton during their consecutive presidential terms (Clinton 1997-2000 and Bush 2001-2004). The x-axis represents the two presidents, while the y-axis represents headline count. The different years are represented using fill color of the bars, with four segments for each president, representing four years in office. Overall, the column for Bush is much taller than that for Clinton, at around 65 headlines to Clinton's 20. The year with the largest number of presidential headlines is 2001."}
 
@@ -70,6 +68,7 @@ ggplot(Both_Headlines, aes(x = fct_rev(President),
   theme_classic()
   
 ```
+
 This plot shows the number of New York Times headlines that each president was mentioned in during their consecutive terms (Bill Clinton 1997-2000 and George W. Bush 2001-2004) by year. Based on the plot, there is clearly a large difference in both the total number of headlines for each president, where Bush had a total of 65 headline mentions between 2001 and 2004 and Clinton only had 20. There does not seem to be a consistent pattern of increase or decrease of headlines by year during a presidential term. Notably, Bush had a huge surge of headlines in 2001 which is likely due to the influx of New York Times articles around the crisis of 9/11. I decided to look at whether there was also a large difference in the total number of New York Times articles in this data set between 1997-2000 and 2001-2004 that might confound these results.
 
 ```{r}
@@ -77,10 +76,8 @@ NYTimes |>
   group_by(Year) |>
   summarize(count = n())
 ```
+
 We can see from this table that the total number of article headlines from 1997-2000 was 1170, and the total number of headlines from 2001-2004 was 1154. Thus, the total article count is not the reason behind the difference in headline count per president.
-
-
-
 
 Another question of interest was whether the typical number of words per headline varied by month, and if this relationship changed depending on whether the headline contained punctuation.
 
@@ -110,5 +107,5 @@ ggplot(NYTimesWM, aes(x = fct_relevel(Month, c('Jan', 'Feb', 'Mar',
   )
 
 ```
-This plot shows the distributions of the number of words per headline for each month for headlines with and without punctuation. By month, the distributions do not show a clear trend, but the ranges for February and November with punctuation appear to be the largest overall excluding outliers, while May has both the longest headline (largest outlier) and one of the shortest, at one word. However, looking at the comparison between headlines with punctuation and headlines without punctuation, the ranges for headlines with punctuation show higher word counts for every single month, and there are also far more outliers on the high end for this category. In fact, the upper quartile for headlines with punctuation is a larger number of words for every month except August, which is even with no punctuation. These results are understandable considering that longer sentences are more likely to need punctuation in order to have proper grammar. The months with the largest difference between punctuation and no punctuation in median number of words per headline are September and November.
 
+This plot shows the distributions of the number of words per headline for each month for headlines with and without punctuation. By month, the distributions do not show a clear trend, but the ranges for February and November with punctuation appear to be the largest overall excluding outliers, while May has both the longest headline (largest outlier) and one of the shortest, at one word. However, looking at the comparison between headlines with punctuation and headlines without punctuation, the ranges for headlines with punctuation show higher word counts for every single month, and there are also far more outliers on the high end for this category. In fact, the upper quartile for headlines with punctuation is a larger number of words for every month except August, which is even with no punctuation. These results are understandable considering that longer sentences are more likely to need punctuation in order to have proper grammar. The months with the largest difference between punctuation and no punctuation in median number of words per headline are September and November.
