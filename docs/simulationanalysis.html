@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-11-08">
 <meta name="description" content="Are young females less likely to see their own gender as smart?">
 
-<title>Maren Rusk - Simulation Analysis</title>
+<title>Maren Rusk - Permutation Tests</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -129,15 +129,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data-viz" role="button" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Data Viz</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tidy-tuesday-data-vizualizations" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tidy Tuesday Data Vizualizations</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-data-viz">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tidy-tuesday-data-vizualizations">    
         <li>
     <a class="dropdown-item" href="./visualization1.html">
  <span class="dropdown-text">Olympics</span></a>
@@ -150,15 +146,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
   <li class="nav-item">
     <a class="nav-link" href="./textanalysis.html"> 
-<span class="menu-text">Text Analysis</span></a>
+<span class="menu-text">NYT Headline Analysis</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./simulationanalysis.html" aria-current="page"> 
-<span class="menu-text">Simulation Analysis</span></a>
+<span class="menu-text">Permutation Tests</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./sqldata.html"> 
-<span class="menu-text">SQL Analysis</span></a>
+<span class="menu-text">SQL Plotting</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -179,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Simulation Analysis</h1>
+<h1 class="title">Permutation Tests</h1>
 </div>
 
 <div>
@@ -213,14 +209,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>In this analysis, I will conduct a permutation test to attempt to answer the research question: Are young females less likely to identify adults of their own gender as smart than young males are? The data for this test, <u>Gender Stereotypes in 5-7 year old Children</u>, was found in the R openintro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a “smart” or “nice” individual in an image. The <em>stereotype</em> variable gives the proportion of trials where each child chose a gender target that matched their own gender. Focusing specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, I will test for a difference in this variable between the male and female genders. Below, I show a bar plot of the differences in stereotype proportion between male and female children.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>In this analysis, I will conduct a permutation test to attempt to answer the research question: Are young females less likely to identify adults of their own gender as smart than young males are? The data for this test, <u>Gender Stereotypes in 5-7 year old Children</u>, was found in the R openintro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a “smart” or “nice” individual in an image. The <em>stereotype</em> variable gives the proportion of trials where each child chose a gender target that matched their own gender. Focusing specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, I will test for a difference in this variable between the male and female genders.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gender_stereo <span class="ot">&lt;-</span> children_gender_stereo[[<span class="st">"2"</span>]]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gender_stereo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gender_stereo <span class="ot">&lt;-</span> children_gender_stereo[[<span class="st">"2"</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(trait <span class="sc">==</span> <span class="st">"smart"</span>, target <span class="sc">==</span> <span class="st">"adults"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gender_stereo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  subject gender age trait target stereotype high_achieve_caution
 1       1   male   6 smart adults       0.75                 0.25
@@ -230,69 +224,90 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5       5   male   5 smart adults       0.25                 0.75
 6       6   male   7 smart adults       0.75                 0.50</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>prop_data <span class="ot">&lt;-</span> gender_stereo <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stereotype =</span> <span class="fu">factor</span>(stereotype))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prop_data, <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">fill =</span> stereotype)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Stereotype proportion by gender for 'smart adult' selections"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulationanalysis_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="This bar plot displays stereotype proportion by gender, as two side by side segmented bars, one male and one female. The bars are split up by the total number of each stereotype proportion observed, between the five possible proportions: 0, 0.25, 0.5, 0.75, and 1. There is a visible difference between the female and male bars, with males having a much larger count for larger stereotypes, and females having a larger count for smaller stereotypes." width="672"></p>
+</figure>
 </div>
+</div>
+</div>
+<p>Based on this plot, we can see a clear difference between male and female stereotype proportions resulting from this study. In particular, the male bar shows a much larger count for an observed stereotype of 1, and the female bar shows a much larger count for an observed stereotype of 0.25. This means that 5-7 year old male children in the study were overall much more likely to choose male adults to be smart than female children were to choose female adults to be smart. The code chunk below shows that the difference in mean stereotype proportion between male and female children is in fact 0.0972.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># wrangle data fo get difference in means between male/female</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>stereo_obs <span class="ot">&lt;-</span> gender_stereo <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(trait <span class="sc">==</span> <span class="st">"smart"</span>, target <span class="sc">==</span> <span class="st">"adults"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">|&gt;</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_stereotype =</span> <span class="fu">mean</span>(stereotype)) <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">difference =</span> mean_stereotype[gender <span class="sc">==</span> <span class="st">"male"</span>] <span class="sc">-</span> mean_stereotype[gender <span class="sc">==</span> <span class="st">"female"</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">difference =</span> <span class="fu">diff</span>(mean_stereotype)) <span class="sc">|&gt;</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(difference)</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>stereo_obs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.09722222 0.09722222</code></pre>
+<pre><code>[1] 0.09722222</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to produce one sample experiment under the null hypothesis</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>simulate_choices <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, num_tests) {</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  female_choices <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">size =</span> num_tests, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  male_choices <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">size =</span> num_tests, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(male_choices) <span class="sc">-</span> <span class="fu">mean</span>(female_choices))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate many experiments</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>num_exper <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>distribution <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span>num_exper, simulate_choices, <span class="at">num_tests =</span> <span class="dv">144</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate p-value</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(distribution <span class="sc">&gt;=</span> stereo_obs) <span class="sc">/</span> num_exper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.013</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize null sampling distribution with p-value</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>distribution <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> distribution)) <span class="sc">+</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> stereo_obs, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span> </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sampling Distribution when Ho is True"</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"aka no difference between gender picks"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"mean difference in proportion of stereotype by gender"</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to produce one permuted experiment under the null hypothesis</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>permute_stereo <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, data) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(gender, stereotype) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">stereo_perm =</span> <span class="fu">sample</span>(stereotype, <span class="at">replace =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gender) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">obs_avg =</span> <span class="fu">mean</span>(stereotype), <span class="at">perm_avg =</span> <span class="fu">mean</span>(stereo_perm)) <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">obs_avg_diff =</span> <span class="fu">diff</span>(obs_avg), <span class="at">perm_avg_diff =</span> <span class="fu">diff</span>(perm_avg))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate many experiments</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>num_exper <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>null_dist <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span>num_exper, permute_stereo, <span class="at">data =</span> gender_stereo) <span class="sc">|&gt;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>()</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize null sampling distribution with p-value</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">|&gt;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> perm_avg_diff)) <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> obs_avg_diff), <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sampling Distribution when Ho is True"</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"aka no difference between gender picks"</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"mean difference in proportion of stereotype by gender"</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="simulationanalysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="simulationanalysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="This histogram displays a null sampling distribution of differences between stereotype proportion by gender using randomized data. The x-axis represents the mean difference in proportion of stereotype by gender, and the y-axis represents count. The shape of the histogram resembles a normal curve, with a slight gap at x = 0. A red vertical line intercepts the x-axis at x = 0.0972, the observed mean difference from the actual experimental data." width="672"></p>
 </figure>
 </div>
 </div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculating the p-value</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">p_value =</span> <span class="fu">mean</span>(perm_avg_diff <span class="sc">&gt;</span> obs_avg_diff))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  p_value
+    &lt;dbl&gt;
+1  0.0302</code></pre>
 </div>
-<p>This plot displays a histogram of sample difference in means calculated under the assumption that there is no inherent difference between how often a male or female will pick their own gender to be smarter. The red line represents the observed mean difference stereotype proportion between the male and female genders from the data, 0.0972. The histogram allows for visualization of the above calculated p-value of 0.013, meaning that only 1.3% off the 5000 samples had a difference in means (male - female) greater than 0.0972.</p>
+</div>
+<p>This plot displays a histogram of sample difference in means calculated under the assumption that there is no inherent difference between how often a male or female will pick their own gender to be smarter. The red line represents the observed mean difference stereotype proportion between the male and female genders from the data, 0.0972. The histogram allows for visualization of the above calculated p-value of 0.0302, meaning that only 3.02% of the 5000 samples had a difference in means (male - female) greater than 0.0972.</p>
 <p><u>Process</u></p>
 <p>I began this test with the null hypothesis, Ho, that the difference between male and female stereotype was 0, and the alternative hypothesis, Ha, that the difference between male and female stereotype was greater than 0:</p>
 <p>Ho: μmale - μfemale = 0, Ha: μmale - μfemale &gt; 0</p>
-<p>I wrangled my dataset to find the mean stereotype proportion for all females and all males in the study, and ultimately the difference in these means (0.0972). Then, I created a null sampling distribution under the assumption of the null hypothesis by simulating 5000 experiments with equal probabilities of any of the proportions observed in the dataset for each males and females, and finding the difference in male and female means for each experiment. I used this distribution to calculate a p-value by finding the percent of experiments where the difference means (male - female) was greater than the observed difference in means from the dataset.</p>
+<p>I wrangled my dataset to find the mean stereotype proportion for all females and all males in the study, and ultimately the difference in these means (0.0972). Then, I created a null sampling distribution under the assumption of the null hypothesis by shuffling the experimental data 5000 times to randomize the pairing between gender and stereotype proportions, and finding the difference in male and female means for each experiment. I used this distribution to calculate a p-value by finding the percent of experiments where the difference means (male - female) was greater than the observed difference in means from the dataset.</p>
 <p><u>Results</u></p>
-<p>I found a p-value of 0.013, which is low enough to reject the null hypothesis. Thus, this dataset shows statistically significant evidence that 5-7 year old males are more likely to select adults of their own gender to be smart than 5-7 year old females are.</p>
+<p>I found a p-value of 0.0302, which is low enough to reject the null hypothesis. Thus, this dataset shows statistically significant evidence that 5-7 year old males are more likely to select adults of their own gender to be smart than 5-7 year old females are.</p>
 <p><u>Data Source</u></p>
 <p>Bian L, Leslie SJ, Cimpian A. 2017. “Gender stereotypes about intellectual ability emerge early and influence children’s interests”. Science 355:6323 (389-391). https://www.science.org/doi/10.1126/science.aah6524.</p>
 

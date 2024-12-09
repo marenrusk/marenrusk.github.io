@@ -9,16 +9,27 @@ execute:
   message: false
 ---
 
-```{r}
+In this project, I will use data from the June 2024 "Cheese" folder from the TidyTuesday github repository. This data was originally scraped from cheese.com, which contains information on 2,041 specialty cheeses from over 74 countries across the world. The dataset contains many cheeses, along with the animal and region they come from, and information about the color, texture, rind type, flavor, and aroma of the cheese.
+
+I have looked specifically into rind type and color, in order to explore which rind types are most common, and how this relates to the color of the cheese, using visualizations.
+
+An example of the data can be seen below.
+
+```{r, echo=FALSE}
 library(tidyverse)
 library(ggplot2)
 
-cheeses <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-06-04/cheeses.csv')
+cheeses <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-06-04/cheeses.csv') |>
+  select(cheese, milk, country, rind, color, flavor, texture, aroma)
+
+head(cheeses)
 ```
 
-```{r}
+```{r, fig.alt= "This bar plot shows the total amount of cheese types for each rind type, segmented by color. The x-axis represents the type of rind, and the y-axis represents the count. The segments of each bar are outlined in different colors, depending on the color of the cheese, shown in the legend. There are 17 possible different colors of cheese in the data set. The chart shows a much higher total count for natural cheese rinds, of over 300 cheeses. For most of the rind categories, white and yellow have the highest cheese count, but out of natural rinds, pale yellow cheese is the most common. All of the non-natural rinds have cheese type counts of less than 100 cheese types, with varying colors."}
 
-ggplot(cheeses, aes(x = rind, color = color)) + 
+cheeses |>
+  na.omit() |>
+  ggplot(aes(x = rind, color = color)) + 
   geom_bar() + 
   labs(
     title = "Cheese Rind Count by Color",
@@ -27,5 +38,44 @@ ggplot(cheeses, aes(x = rind, color = color)) +
   ) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+**Analysis:**
+
+From this plot, we can clearly see that a "natural" rind is by far the most common rind type among cheeses in this dataset. Artifical, edible, and plastic rinds seem to be much less common. For most of the rind types, it appears that white and yellow are the most prominent colors of cheese. However, pale yellow is the most common among natural rinds and thus also very common overall. There are very few blue-grey or brown colored cheeses. I used "color" instead of "fill" to differentiate between colors because the large amount of different colors made it very difficult to see the difference between colors without sharp lines in between.
+
+Since it is difficult to get a lot of information from this plot, I thought it might be interesting to look at how cheese colors vary across countries of origin. There ended up being too many countries to display on a single plot, so I selected the five countries with the most cheeses: Australia, Canada, France, Italy, and the US.
+
+```{r, fig.alt= "This bar plot shows the total amount of cheese types for each country, segmented by color. The x-axis represents the country, and the y-axis represents the count. The segments of each bar are outlined in different colors, depending on the color of the cheese, shown in the legend. There are 17 possible different colors of cheese in the data set. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses."}
+
+cheeses |>
+  na.omit() |>
+  filter(country %in% c("Australia", "Canada", "France", "Italy", "United States")) |>
+  ggplot(aes(x = country, color = color)) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+**Analysis:**
+
+This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count leads me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot. 
+
+```{r}
+cheeses |>
+  filter(country == "United States") |>
+  group_by(rind) |>
+  summarize(rind_num = n()) |>
+  arrange(desc(rind_num)) |>
+  head()
+
+
+cheeses |>
+  filter(rind == "natural") |>
+  group_by(country) |>
+  summarize(natural_num = n()) |>
+  arrange(desc(natural_num)) |>
+  head()
+  
+```
+
+Wrangling the data, we do in fact find that natural rinds make up for 124 of the 305 United States cheese types, and that the United States contains by far the highest number of cheeses with natural rinds.
 
 **Link to Data:** <https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04>

@@ -8,8 +8,7 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-      - text: "Data Viz"
+      - text: "Tidy Tuesday Data Vizualizations"
         menu: 
          - text: Olympics
            href: visualization1.html
@@ -22,7 +21,7 @@ website:
 
 format:
   html:
-    theme: cosmo
+    theme: superhero
     css: styles.css
     toc: true
     page-layout: full

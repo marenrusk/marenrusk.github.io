@@ -1,6 +1,6 @@
 ---
 title: "Maren Rusk"
-image: websitepicture.jpeg
+image: 2027-Rusk_Maren.jpeg
 toc: false
 about: 
   template: jolla
@@ -14,4 +14,4 @@ about:
 ---
 
 
-Hi! My name is Maren, and I'm a student at Pomona College, class of 2027. I am studying Mathematics and Data Science with an interest in politics. Outside of school, I swim for the Pomona-Pitzer swim team and play the piano.
+Hi! My name is Maren, and I'm a student at Pomona College, class of 2027. I am studying mathematics and data science with an interest in politics. Outside of school, I swim for the Pomona-Pitzer swim team and play the piano.
