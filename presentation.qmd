@@ -1,5 +1,5 @@
 ---
-title: "DS002R Projects"
+title: "DS002R Projects Overview"
 author: "Maren Rusk"
 subtitle: "December 9, 2024"
 format:
@@ -8,16 +8,290 @@ format:
     slide-number: true
     show-slide-number: all
     embed-resources: true
+    theme: moon
 execute:
   echo: true
   warning: false
   message: false
 ---
 
-# Project 1: TidyTuesday Visualizations
+# NYT Headlines Analysis
 
-## Olympic Athletes
+## Process
 
-## Cheese
+-   Data on New York Times headlines from RTextTools package
+    -   Date, title, subject of headlines from 1996-2006
+-   Compared total NYT headlines mentions between Bill Clinton and George W. Bush during their consecutive terms (Clinton 1997-2000 and Bush 2001-2004)
+-   Examined word length of headlines across months, with and without punctuation
 
-# Project 2: 
+## Presidential Headlines
+
+```{r, fig.alt="This col plot shows the differences in total NYT headline mentions between George W. Bush and Bill Clinton during their consecutive presidential terms (Clinton 1997-2000 and Bush 2001-2004). The x-axis represents the two presidents, while the y-axis represents headline count. The different years are represented using fill color of the bars, with four segments for each president, representing four years in office. Overall, the column for Bush is much taller than that for Clinton, at around 65 headlines to Clinton's 20. The year with the largest number of presidential headlines is 2001.", echo=FALSE}
+#| echo: false
+library(RTextTools) 
+library(tidyverse)
+data(NYTimes)
+
+library(tidyverse)
+library(ggplot2)
+
+NYTimes <- NYTimes |>
+ 
+  # Create a column for year using the date
+  mutate(Year_str = str_extract(Date, "\\D-\\d\\d")) |>
+  mutate(Year = str_sub(Year_str, 3, 4))
+
+# Headlines with "Clinton" between 1997 and 2000  
+Clinton_Headlines <- NYTimes |>
+  filter(Year >= 97 | Year == "00") |>
+  filter(str_detect(Title, "Clinton")) |>
+  select(Date, Year, Title) |>
+  mutate(President = "Clinton")
+
+# Headlines with "Bush" between 2001 and 2004
+Bush_Headlines <- NYTimes |>
+  filter(Year <= 04, Year != "00", Year != "05", Year != "06") |>
+  filter(str_detect(Title, "Bush")) |>
+  select(Date, Year, Title) |>
+  mutate(President = "Bush")
+
+# Join these two together to plot
+Both_Headlines <- full_join(Clinton_Headlines, Bush_Headlines) |>
+  group_by(President, Year) |>
+  summarize(num_headlines = n())
+
+# bar chart
+ggplot(Both_Headlines, aes(x = fct_rev(President), 
+                           y = num_headlines, 
+                           fill = fct_relevel(Year, 
+                                              c("97", "98","99", "00", "01", "02", "03", "04")))) + 
+  geom_col() + 
+  scale_x_discrete(labels=c('Clinton (1997-2000)', 'Bush (2001-2004)')) + 
+  labs(
+    title = "Clinton v Bush: Which President Had More Headlines During Their Term?",
+    x = "President",
+    y = "Number of Mentions in NYT Headlines During Term",
+    fill = "Year"
+  ) + 
+  theme_classic()
+  
+```
+
+## Takeaways
+
+-   Bush had far more headlines than Clinton (65-20)
+    -   1170 total headlines from Clinton's term, 1154 from Bush's
+-   No noticeable pattern of an increase or decrease in headlines between beginning and end of term
+-   Bush had a large surge of headlines in 2001 (9/11)
+
+## Headline Length and Punctuation
+
+```{r, fig.alt="This plot shows the distributions of the number of words per headline for each month for headlines with and without punctuation in a series of boxplots. The x-axis represents month, while the y-axis represents the number of words per headline. For each month, there is a red boxplot labeled 'FALSE' for headlines with no punctuations, and a blue boxplot labeled 'TRUE' for headlines with punctuation. By month, the distributions do not show a clear trend, but the ranges for February and November with punctuation appear to be the largest overall excluding outliers, while May has both the longest headline (largest outlier) and one of the shortest, at one word. The boxplots for headlines with punctuations show mostly higher median word counts than those without punctuation.", echo=FALSE}
+
+NYTimesWM <- NYTimes |>
+  # extract month from date as new variable
+  mutate(Month = str_extract(Date, "(?<=-).+(?=-)")) |>
+  mutate(word_list = str_split(Title, " ")) |>
+  mutate(num_words = lengths(word_list)) |>
+  # variable for whether headline contains punctuation
+  mutate(Punctuation = grepl("[[:punct:]]", Title))
+
+
+# boxplot  
+ggplot(NYTimesWM, aes(x = fct_relevel(Month, c('Jan', 'Feb', 'Mar',
+                                               'Apr', 'May', 'Jun',
+                                               'Jul', 'Aug', 'Sep',
+                                               'Oct', 'Nov', 'Dec')), 
+                      y = num_words, color = Punctuation)) + 
+  geom_boxplot() + 
+  labs(
+    title = "Length of New York Times Headlines by Month 
+    With and Without Punctuation Between 1996 and 2006",
+    x = "Month",
+    y = "Number of Words Per Headline"
+  )
+
+```
+
+## Takeaways
+
+-   Headlines with punctuation are wordier
+    -   Median punctuation \>= no punctuation in every month and upper quartile higher in every month but August
+-   Headlines with punctuation have more outliers
+-   February and November have the largest range of headline length, excluding outliers
+-   May has both the shortest headline (1 word) and the longest (24 words)
+
+# Gender Stereotypes
+
+## Data
+
+-   Experimental study on 5-7 year old children, focusing on smart, adult trials
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(openintro)
+gender_stereo <- children_gender_stereo[["2"]] |>
+  filter(trait == "smart", target == "adults")
+
+head(gender_stereo, 10)
+
+```
+
+**Research question**: Are young females less likely than young males to perceive adults of their own gender as smart?
+
+------------------------------------------------------------------------
+
+**Ho: μmale - μfemale = 0, Ha: μmale - μfemale \> 0**
+
+```{r, echo=FALSE}
+prop_data <- gender_stereo |>
+  mutate(stereotype = factor(stereotype))
+
+ggplot(prop_data, aes(x = gender, fill = stereotype)) +
+  geom_bar() +
+  labs(
+    title = "Stereotype proportion by gender for 'smart adult' selections"
+  ) +
+  theme_bw()
+```
+
+- Difference in mean stereotype proportion between male and female children is 0.0972.
+
+## P-Value: 0.0302 {.smaller}
+
+```{r, fig.alt="This histogram displays a null sampling distribution of differences between stereotype proportion by gender using randomized data. The x-axis represents the mean difference in proportion of stereotype by gender, and the y-axis represents count. The shape of the histogram resembles a normal curve, with a slight gap at x = 0. A red vertical line intercepts the x-axis at x = 0.0972, the observed mean difference from the actual experimental data.", echo=FALSE}
+
+# function to produce one permuted experiment under the null hypothesis
+permute_stereo <- function(rep, data) {
+  data |>
+    select(gender, stereotype) |>
+    mutate(stereo_perm = sample(stereotype, replace = FALSE)) |>
+    group_by(gender) |>
+    summarize(obs_avg = mean(stereotype), perm_avg = mean(stereo_perm)) |>
+    summarize(obs_avg_diff = diff(obs_avg), perm_avg_diff = diff(perm_avg))
+}
+
+# simulate many experiments
+set.seed(47)
+num_exper <- 5000
+null_dist <- map(1:num_exper, permute_stereo, data = gender_stereo) |>
+  list_rbind()
+
+
+# visualize null sampling distribution with p-value
+null_dist |>
+  ggplot(aes(x = perm_avg_diff)) +
+  geom_histogram() +
+  geom_vline(aes(xintercept = obs_avg_diff), color = "red") +
+  theme_bw() +
+  labs(
+    title = "Sampling Distribution when Ho is True",
+    subtitle = "aka no difference between gender picks",
+    x = "mean difference in proportion of stereotype by gender"
+  )
+
+```
+Reject Null Hypothesis: This dataset presents statistically significant evidence that 5-7 year old males are more likely than 5-7 year old females to perceive adults of their own gender as "smart".
+
+# Ear Absorbance by Age
+
+---
+```{r, echo=FALSE}
+library(tidyverse)
+library(RMariaDB)
+con_wai <- dbConnect(
+  MariaDB(), host = "scidb.smith.edu",
+  user = "waiuser", password = "smith_waiDB", 
+  dbname = "wai"
+)
+
+Measurements <- tbl(con_wai, "Measurements")
+PI_Info <- tbl(con_wai, "PI_Info")
+Subjects <- tbl(con_wai, "Subjects")
+```
+
+```{sql, echo=FALSE}
+#| connection: con_wai
+#| output.var: demo_ears
+
+SELECT Measurements.Identifier,
+        AVG(Absorbance) AS Mean_Absorbance,
+        Frequency,
+        CONCAT(AuthorsShortList, " (", Year, ") ", " N= ", 
+              COUNT(DISTINCT Measurements.SubjectNumber, Ear), 
+              " ; ", Instrument) AS Label,
+        FLOOR(Age / 10) AS Age_Group -- group ages into nine different age groups
+        
+FROM Measurements
+JOIN PI_Info ON Measurements.Identifier = PI_Info.Identifier 
+JOIN Subjects ON Subjects.SubjectNumber = Measurements.SubjectNumber
+WHERE Measurements.Identifier = "Sun_2023" AND
+      Measurements.Frequency > 200 AND Measurements.Frequency < 8000
+GROUP BY Age_Group, Frequency, Instrument;
+```
+
+```{r, fig.alt="This plot displays mean percent absorbance per frequency (in hertz) for the the 2023 study by Sun et al, by age group. The x-axis represents frequency, the y-axis represents mean absorbance, and each age group (grouped by 10 years) is displayed on a separate color-coded line. For the most part, the lines increase up to about 1000 hz, remain constant between 1000 and 4000 hz, and then decrease. The 80-89 age group shows a large dip between 1000 and 4000 hz in comparison to the other lines, with a local minimum at around 2000 hz, but still reaches a high peak at around 4000 hz.", fig.width = 7, echo=FALSE}
+
+demo_ears <- demo_ears |> 
+  # create age group labels
+  mutate(Age_Label = case_when(
+    Age_Group == 0 ~ "0-9 years",
+    Age_Group == 1 ~ "10-19 years",
+    Age_Group == 2 ~ "20-29 years",
+    Age_Group == 3 ~ "30-39 years",
+    Age_Group == 4 ~ "40-49 years",
+    Age_Group == 5 ~ "50-59 years",
+    Age_Group == 6 ~ "60-69 years",
+    Age_Group == 7 ~ "70-79 years",
+    Age_Group == 8 ~ "80-89 years"
+  ))
+
+demo_ears |>
+  ggplot(aes(x = Frequency, y = Mean_Absorbance, color = Age_Label)) +
+  geom_line() +
+  xlim(200, 8000) +
+  ylim(0, 1) +
+  labs(
+    title = "Mean absorbance by age group in WAI database Sun et al. 2023 study",
+    x = "Frequency(Hz)",
+    y = "Mean Absorbance",
+    color = NULL
+  ) +
+  scale_x_log10(
+    limits = c(200, 8000),
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    breaks = seq(0, 1, 0.2)
+  ) +
+  theme_bw() +
+  theme(
+    plot.background = element_rect(
+      fill = "grey90", 
+      color = "grey90", 
+      size = 30),
+    legend.position = c(0.01, 0.99),
+    legend.justification = c(0, 1),
+    legend.background = element_rect(
+      color = "black",
+      size = 0.3,
+      fill = "white"
+    ),
+    legend.text = element_text(size = 7),
+    legend.key.height = unit(0.15, "mm"),
+    legend.key = element_rect(size = 0.1),
+    legend.key.size = unit(1, "cm"),
+    aspect.ratio = 0.8,
+    text = element_text(face = "bold"),
+    plot.title = element_text(hjust = 0.5),
+    plot.margin = margin(30, 70, 30, 40)
+  )
+```
+## Takeaways
+
+- Most age groups have very similar absorbance trajectories
+- 80-89 has a very different curve, with a large drop in mean absorbance at around 2000 hz, however has the highest mean absorbance from 400-800 and 4000-5000 hz
+- 70-79 curve shows no sign of absorbance decline
+
+# Thank You!

@@ -70,7 +70,16 @@ ggplot(Both_Headlines, aes(x = fct_rev(President),
   theme_classic()
   
 ```
-This plot shows the number of New York Times headlines that each president was mentioned in during their consecutive terms (Bill Clinton 1997-2000 and George W. Bush 2001-2004) by year. Based on the plot, there is clearly a large difference in both the total number of headlines for each president, where Bush had a total of 65 headline mentions between 2001 and 2004 and Clinton only had 20. There does not seem to be a consistent pattern of increase or decrease of headlines by year during a presidential term. Notably, Bush had a huge surge of headlines in 2001 which is likely due to the influx of New York Times articles around the crisis of 9/11. It would be interesting to look at whether there was also a large difference in the total number of New York Times articles in this data set between 1997-2000 and 2001-2004 that might confound these results.
+This plot shows the number of New York Times headlines that each president was mentioned in during their consecutive terms (Bill Clinton 1997-2000 and George W. Bush 2001-2004) by year. Based on the plot, there is clearly a large difference in both the total number of headlines for each president, where Bush had a total of 65 headline mentions between 2001 and 2004 and Clinton only had 20. There does not seem to be a consistent pattern of increase or decrease of headlines by year during a presidential term. Notably, Bush had a huge surge of headlines in 2001 which is likely due to the influx of New York Times articles around the crisis of 9/11. I decided to look at whether there was also a large difference in the total number of New York Times articles in this data set between 1997-2000 and 2001-2004 that might confound these results.
+
+```{r}
+NYTimes |>
+  group_by(Year) |>
+  summarize(count = n())
+```
+We can see from this table that the total number of article headlines from 1997-2000 was 1170, and the total number of headlines from 2001-2004 was 1154. Thus, the total article count is not the reason behind the difference in headline count per president.
+
+
 
 
 Another question of interest was whether the typical number of words per headline varied by month, and if this relationship changed depending on whether the headline contained punctuation.

@@ -40,5 +40,89 @@
     "title": "Cheese!",
     "section": "",
     "text": "In this project, I will use data from the June 2024 “Cheese” folder from the TidyTuesday github repository. This data was originally scraped from cheese.com, which contains information on 2,041 specialty cheeses from over 74 countries across the world. The dataset contains many cheeses, along with the animal and region they come from, and information about the color, texture, rind type, flavor, and aroma of the cheese.\nI have looked specifically into rind type and color, in order to explore which rind types are most common, and how this relates to the color of the cheese, using visualizations.\nAn example of the data can be seen below.\n\n\n# A tibble: 6 × 8\n  cheese             milk  country     rind    color       flavor  texture aroma\n  &lt;chr&gt;              &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;\n1 Aarewasser         cow   Switzerland washed  yellow      sweet   buttery butt…\n2 Abbaye de Belloc   sheep France      natural yellow      burnt … creamy… lano…\n3 Abbaye de Belval   cow   France      washed  ivory       &lt;NA&gt;    elastic arom…\n4 Abbaye de Citeaux  cow   France      washed  white       acidic… creamy… barn…\n5 Abbaye de Tamié    cow   France      washed  white       fruity… creamy… perf…\n6 Abbaye de Timadeuc cow   France      washed  pale yellow salty,… soft    nutty\n\n\n\ncheeses |&gt;\n  na.omit() |&gt;\n  ggplot(aes(x = rind, color = color)) + \n  geom_bar() + \n  labs(\n    title = \"Cheese Rind Count by Color\",\n    x = \"Rind Type\",\n    y = \"Count\"\n  ) + \n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n\n\n\n\n\n\n\nAnalysis:\nFrom this plot, we can clearly see that a “natural” rind is by far the most common rind type among cheeses in this dataset. Artifical, edible, and plastic rinds seem to be much less common. For most of the rind types, it appears that white and yellow are the most prominent colors of cheese. However, pale yellow is the most common among natural rinds and thus also very common overall. There are very few blue-grey or brown colored cheeses. I used “color” instead of “fill” to differentiate between colors because the large amount of different colors made it very difficult to see the difference between colors without sharp lines in between.\nSince it is difficult to get a lot of information from this plot, I thought it might be interesting to look at how cheese colors vary across countries of origin. There ended up being too many countries to display on a single plot, so I selected the five countries with the most cheeses: Australia, Canada, France, Italy, and the US.\n\ncheeses |&gt;\n  na.omit() |&gt;\n  filter(country %in% c(\"Australia\", \"Canada\", \"France\", \"Italy\", \"United States\")) |&gt;\n  ggplot(aes(x = country, color = color)) +\n  geom_bar() + \n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n\n\n\n\n\n\n\nAnalysis:\nThis plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count leads me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot.\n\ncheeses |&gt;\n  filter(country == \"United States\") |&gt;\n  group_by(rind) |&gt;\n  summarize(rind_num = n()) |&gt;\n  arrange(desc(rind_num)) |&gt;\n  head()\n\n# A tibble: 6 × 2\n  rind         rind_num\n  &lt;chr&gt;           &lt;int&gt;\n1 natural           124\n2 rindless           44\n3 &lt;NA&gt;               41\n4 bloomy             32\n5 mold ripened       21\n6 washed             21\n\ncheeses |&gt;\n  filter(rind == \"natural\") |&gt;\n  group_by(country) |&gt;\n  summarize(natural_num = n()) |&gt;\n  arrange(desc(natural_num)) |&gt;\n  head()\n\n# A tibble: 6 × 2\n  country                                natural_num\n  &lt;chr&gt;                                        &lt;int&gt;\n1 United States                                  124\n2 Italy                                           83\n3 France                                          51\n4 Ireland                                         14\n5 Austria                                         13\n6 England, Great Britain, United Kingdom          12\n\n\nWrangling the data, we do in fact find that natural rinds make up for 124 of the 305 United States cheese types, and that the United States contains by far the highest number of cheeses with natural rinds.\nLink to Data: https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04"
+  },
+  {
+    "objectID": "presentation.html#olympic-athletes",
+    "href": "presentation.html#olympic-athletes",
+    "title": "DS002R Projects Overview",
+    "section": "Olympic Athletes",
+    "text": "Olympic Athletes"
+  },
+  {
+    "objectID": "presentation.html#cheese",
+    "href": "presentation.html#cheese",
+    "title": "DS002R Projects Overview",
+    "section": "Cheese",
+    "text": "Cheese"
+  },
+  {
+    "objectID": "presentation.html#data",
+    "href": "presentation.html#data",
+    "title": "DS002R Projects Overview",
+    "section": "Data",
+    "text": "Data\n\nExperimental study on 5-7 year old children, focusing on smart, adult trials\n\n\n\n   subject gender age trait target stereotype high_achieve_caution\n1        1   male   6 smart adults       0.75                 0.25\n2        2   male   5 smart adults       1.00                 1.00\n3        3   male   7 smart adults       0.25                 0.25\n4        4 female   5 smart adults       1.00                 1.00\n5        5   male   5 smart adults       0.25                 0.75\n6        6   male   7 smart adults       0.75                 0.50\n7        7 female   6 smart adults       0.00                 0.50\n8        8 female   6 smart adults       0.50                 0.75\n9        9   male   5 smart adults       0.75                 0.50\n10      10   male   5 smart adults       1.00                 0.50\n\n\nResearch question: Are young females less likely than young males to perceive adults of their own gender as smart?"
+  },
+  {
+    "objectID": "presentation.html#plots",
+    "href": "presentation.html#plots",
+    "title": "DS002R Projects",
+    "section": "Plots",
+    "text": "Plots"
+  },
+  {
+    "objectID": "presentation.html#key-insights",
+    "href": "presentation.html#key-insights",
+    "title": "DS002R Projects",
+    "section": "Key Insights",
+    "text": "Key Insights\n\nvisualization"
+  },
+  {
+    "objectID": "presentation.html#presidential-headlines",
+    "href": "presentation.html#presidential-headlines",
+    "title": "DS002R Projects Overview",
+    "section": "Presidential Headlines",
+    "text": "Presidential Headlines"
+  },
+  {
+    "objectID": "presentation.html#process",
+    "href": "presentation.html#process",
+    "title": "DS002R Projects Overview",
+    "section": "Process",
+    "text": "Process\n\nData on New York Times headlines from RTextTools package\n\nDate, title, subject of headlines from 1996-2006\n\nCompared total NYT headlines mentions between Bill Clinton and George W. Bush during their consecutive terms (Clinton 1997-2000 and Bush 2001-2004)\nExamined word length of headlines across months, with and without punctuation"
+  },
+  {
+    "objectID": "presentation.html#takeaways",
+    "href": "presentation.html#takeaways",
+    "title": "DS002R Projects Overview",
+    "section": "Takeaways",
+    "text": "Takeaways\n\nBush had far more headlines than Clinton (65-20)\n\n1170 total headlines from Clinton’s term, 1154 from Bush’s\n\nNo noticeable pattern of an increase or decrease in headlines between beginning and end of term\nBush had a large surge of headlines in 2001 (9/11)"
+  },
+  {
+    "objectID": "presentation.html#headline-length-and-punctuation",
+    "href": "presentation.html#headline-length-and-punctuation",
+    "title": "DS002R Projects Overview",
+    "section": "Headline Length and Punctuation",
+    "text": "Headline Length and Punctuation"
+  },
+  {
+    "objectID": "presentation.html#takeaways-1",
+    "href": "presentation.html#takeaways-1",
+    "title": "DS002R Projects Overview",
+    "section": "Takeaways",
+    "text": "Takeaways\n\nHeadlines with punctuation are wordier\n\nMedian punctuation &gt;= no punctuation in every month and upper quartile higher in every month but August\n\nHeadlines with punctuation have more outliers\nFebruary and November have the largest range of headline length, excluding outliers\nMay has both the shortest headline (1 word) and the longest (24 words)"
+  },
+  {
+    "objectID": "presentation.html#p-value-0.0302",
+    "href": "presentation.html#p-value-0.0302",
+    "title": "DS002R Projects Overview",
+    "section": "P-Value: 0.0302",
+    "text": "P-Value: 0.0302\n\nReject Null Hypothesis: This dataset presents statistically significant evidence that 5-7 year old males are more likely than 5-7 year old females to perceive adults of their own gender as “smart”."
+  },
+  {
+    "objectID": "presentation.html#takeaways-2",
+    "href": "presentation.html#takeaways-2",
+    "title": "DS002R Projects Overview",
+    "section": "Takeaways",
+    "text": "Takeaways\n\nMost age groups have very similar absorbance trajectories\n80-89 has a very different curve, with a large drop in mean absorbance at around 2000 hz, however has the highest mean absorbance from 400-800 and 4000-5000 hz\n70-79 curve shows no sign of absorbance decline"
   }
 ]
