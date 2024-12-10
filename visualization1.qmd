@@ -9,7 +9,7 @@ execute:
   message: false
 ---
 
-In this project, I will use data from the "Olympic Athletes and Medals" folder from the TidyTuesday github repository. This data was originally scraped from `www.sports-reference.com` into a Kaggle dataset by RGriffin, and contains bio and medal results information on athletes from the 1896 Athens games through Rio 2016.
+In this project, I will use data from the "Olympic Athletes and Medals" folder from the TidyTuesday github repository. This data was originally scraped from <https://www.sports-reference.com/> into a Kaggle dataset by RGriffin, and contains bio and medal results information on athletes from the 1896 Athens games through Rio 2016.
 
 I have selected six sports from the dataset: swimming, gymnastics, equestrianism, diving, weightlifting, and speed skating, with the intent to explore how the average age of Olympic participants varies by sport and how that has changed over time, using visuals.
 
@@ -31,8 +31,6 @@ olympics|>
 
 head(olympics, 10)
 ```
-
-
 
 Then, I wrangled the data to find the average age of athletes from each year and selected sport. Note that not all of these sports were part of the Olympics in 1896, so average values only appear for the years that the sport was contested in the Olympics.
 

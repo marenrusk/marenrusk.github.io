@@ -9,7 +9,7 @@ execute:
   message: false
 ---
 
-For this project, I will look at data on New York Times headlines from the RTextTools package. This dataset was originally compiled by Professor Amber E. Boydstun at the University of California, Davis. It contains labeled headlines from New York Times articles between 1996 and 2006, including the date, title, and subject. The original information on this dataset can be found at `http://www.amber-boydstun.com/supplementary-information-for-making-the-news.html`.
+For this project, I will look at data on New York Times headlines from the RTextTools package. This dataset was originally compiled by Professor Amber E. Boydstun at the University of California, Davis. It contains labeled headlines from New York Times articles between 1996 and 2006, including the date, title, and subject. The original information on this dataset can be found at <http://www.amber-boydstun.com/supplementary-information-for-making-the-news.html>.
 
 An example of the data is shown below:
 

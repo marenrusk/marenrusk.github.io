@@ -214,7 +214,7 @@ demo_ears |>
   )
 ```
 
-This plot is similar to the first but focused in on the Sun study exclusively, with mean absorbance levels colored by age group. Accordingly, we can see the trend of absorbance increasing with frequency until about 1000 hz. Sun's study evens out a bit more with maxes somewhat spread out between 1000 and 4000hz and then dropping back down at higher frequencies. According to this plot, the only age group that clearly breaks this trend is the oldest group, 80-89-year-old ears with generally much lower absorbances and a max right near 4000hz. Interstingly, the 70-79 year age group does not show any of this decline, and in fact holds some of the highest mean absorbances across frequencies.
+This plot is similar to the first but focused in on the Sun study exclusively, with mean absorbance levels colored by age group. Accordingly, we can see the trend of absorbance increasing with frequency until about 1000 hz. Sun's study evens out a bit more with maxes somewhat spread out between 1000 and 4000hz and then dropping back down at higher frequencies. According to this plot, the only age group that clearly breaks this trend is the oldest group, 80-89-year-old ears with generally much lower absorbances and a max right near 4000hz. This might be insignificant due to the fact that only three ears of ages 80-89 were included in this study. Interestingly, the 70-79 year age group does not show any of this decline, and in fact holds some of the highest mean absorbances across frequencies.
 
 **Process/Discussion**
 
