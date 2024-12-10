@@ -8,7 +8,7 @@
 
 <meta name="author" content="Maren Rusk">
 <meta name="dcterms.date" content="2024-11-08">
-<meta name="description" content="Are young females less likely to see their own gender as smart?">
+<meta name="description" content="Exploring Gender Stereotypes Among Young Children">
 
 <title>Maren Rusk - Permutation Tests</title>
 <style>
@@ -156,6 +156,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./sqldata.html"> 
 <span class="menu-text">SQL Plotting</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./presentation.html"> 
+<span class="menu-text">DS002R Projects Overview</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -180,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    Are young females less likely to see their own gender as smart?
+    Exploring Gender Stereotypes Among Young Children
   </div>
 </div>
 
@@ -209,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this analysis, I will conduct a permutation test to attempt to answer the research question: Are young females less likely to identify adults of their own gender as smart than young males are? The data for this test, <u>Gender Stereotypes in 5-7 year old Children</u>, was found in the R openintro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a “smart” or “nice” individual in an image. The <em>stereotype</em> variable gives the proportion of trials where each child chose a gender target that matched their own gender. Focusing specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, I will test for a difference in this variable between the male and female genders. Below, I show a bar plot of the differences in stereotype proportion between male and female children.</p>
+<p>In this analysis, I will conduct a permutation test to attempt to answer the research question: Are young females less likely than young males to identify adults of their own gender as smart? The data for this test, <u>Gender Stereotypes in 5-7 year old Children</u>, was found in the R openintro package. It reports the results of an experimental study conducted in 2017 by Lin Bian that tested whether some children were more likely to choose someone of their own gender when asked to identify a “smart” or “nice” individual in an image. The <em>stereotype</em> variable gives the proportion of trials where each child chose a gender target that matched their own gender. Focusing specifically on trials where the children were shown images of adults and asked to point out the person who appeared to be smart, I will test for a difference in this variable between the male and female genders. Below, I show a bar plot of the differences in stereotype proportion between male and female children.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gender_stereo <span class="ot">&lt;-</span> children_gender_stereo[[<span class="st">"2"</span>]] <span class="sc">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(trait <span class="sc">==</span> <span class="st">"smart"</span>, target <span class="sc">==</span> <span class="st">"adults"</span>)</span>
@@ -255,6 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 0.09722222</code></pre>
 </div>
 </div>
+<p>Next, I shuffle the data and create a null sampling distribution, in order to determine whether this dataset contains statistically significant evidence of a stereotype difference.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to produce one permuted experiment under the null hypothesis</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>permute_stereo <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, data) {</span>

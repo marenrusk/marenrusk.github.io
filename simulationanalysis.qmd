@@ -1,6 +1,6 @@
 ---
 title: "Permutation Tests"
-description: Are young females less likely to view their own gender as smart?
+description: Exploring Gender Stereotypes Among Young Children
 author: Maren Rusk
 date: November 8, 2024
 format: html

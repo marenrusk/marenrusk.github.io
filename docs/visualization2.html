@@ -105,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -154,6 +155,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="./sqldata.html"> 
 <span class="menu-text">SQL Plotting</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./presentation.html"> 
+<span class="menu-text">DS002R Projects Overview</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -208,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this project, I will use data from the June 2024 “Cheese” folder from the TidyTuesday github repository. This data was originally scraped from cheese.com, which contains information on 2,041 specialty cheeses from over 74 countries across the world. The dataset contains many cheeses, along with the animal and region they come from, and information about the color, texture, rind type, flavor, and aroma of the cheese.</p>
+<p>In this project, I will use data from the June 2024 “Cheese” folder from the TidyTuesday github repository. This data was originally scraped from <code>cheese.com</code>, which contains information on 2,041 specialty cheeses from over 74 countries across the world. The dataset contains many cheeses, along with the animal and region they come from, and information about the color, texture, rind type, flavor, and aroma of the cheese.</p>
 <p>I have looked specifically into rind type and color, in order to explore which rind types are most common, and how this relates to the color of the cheese, using visualizations.</p>
 <p>An example of the data can be seen below.</p>
 <div class="cell">
@@ -262,10 +267,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong>Analysis:</strong></p>
-<p>This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count leads me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot.</p>
+<p>This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count led me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot. The tables below show the most common rind types among US cheeses, and the countries with the most natural-rinded cheeses, respectively.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cheeses <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"United States"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"United States"</span>, <span class="sc">!</span><span class="fu">is.na</span>(rind)) <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(rind) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">rind_num =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(rind_num)) <span class="sc">|&gt;</span></span>
@@ -276,10 +281,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   &lt;chr&gt;           &lt;int&gt;
 1 natural           124
 2 rindless           44
-3 &lt;NA&gt;               41
-4 bloomy             32
-5 mold ripened       21
-6 washed             21</code></pre>
+3 bloomy             32
+4 mold ripened       21
+5 washed             21
+6 ash coated          7</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cheeses <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rind <span class="sc">==</span> <span class="st">"natural"</span>) <span class="sc">|&gt;</span></span>
@@ -299,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6 England, Great Britain, United Kingdom          12</code></pre>
 </div>
 </div>
-<p>Wrangling the data, we do in fact find that natural rinds make up for 124 of the 305 United States cheese types, and that the United States contains by far the highest number of cheeses with natural rinds.</p>
+<p>From the above, we can in fact see that natural rinds make up for 124 of the 305 United States cheese types, and that the United States contains by far the highest number of cheeses with natural rinds.</p>
 <p><strong>Link to Data:</strong> <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04" class="uri">https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04</a></p>
 
 

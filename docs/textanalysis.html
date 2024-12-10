@@ -105,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -154,6 +155,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="./sqldata.html"> 
 <span class="menu-text">SQL Plotting</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./presentation.html"> 
+<span class="menu-text">DS002R Projects Overview</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -208,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>For this project, I will look at data on New York Times headlines from the RTextTools package. This dataset was originally compiled by Professor Amber E. Boydstun at the University of California, Davis. It contains labeled headlines from New York Times articles between 1996 and 2006, including the date, title, and subject. The original information on this dataset can be found at http://www.amber-boydstun.com/supplementary-information-for-making-the-news.html.</p>
+<p>For this project, I will look at data on New York Times headlines from the RTextTools package. This dataset was originally compiled by Professor Amber E. Boydstun at the University of California, Davis. It contains labeled headlines from New York Times articles between 1996 and 2006, including the date, title, and subject. The original information on this dataset can be found at <code>http://www.amber-boydstun.com/supplementary-information-for-making-the-news.html</code>.</p>
 <p>An example of the data is shown below:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -291,35 +296,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>This plot shows the number of New York Times headlines that each president was mentioned in during their consecutive terms (Bill Clinton 1997-2000 and George W. Bush 2001-2004) by year. Based on the plot, there is clearly a large difference in both the total number of headlines for each president, where Bush had a total of 65 headline mentions between 2001 and 2004 and Clinton only had 20. There does not seem to be a consistent pattern of increase or decrease of headlines by year during a presidential term. Notably, Bush had a huge surge of headlines in 2001 which is likely due to the influx of New York Times articles around the crisis of 9/11. It would be interesting to look at whether there was also a large difference in the total number of New York Times articles in this data set between 1997-2000 and 2001-2004 that might confound these results.</p>
+<p>This plot shows the number of New York Times headlines that each president was mentioned in during their consecutive terms (Bill Clinton 1997-2000 and George W. Bush 2001-2004) by year. Based on the plot, there is clearly a large difference in both the total number of headlines for each president, where Bush had a total of 65 headline mentions between 2001 and 2004 and Clinton only had 20. There does not seem to be a consistent pattern of increase or decrease of headlines by year during a presidential term. Notably, Bush had a huge surge of headlines in 2001 which is likely due to the influx of New York Times articles around the crisis of 9/11. I decided to look at whether there was also a large difference in the total number of New York Times articles in this data set between 1997-2000 and 2001-2004 that might confound these results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>NYTimes <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   Year  count
+   &lt;chr&gt; &lt;int&gt;
+ 1 00      292
+ 2 01      295
+ 3 02      305
+ 4 03      294
+ 5 04      260
+ 6 05      237
+ 7 06      248
+ 8 96      295
+ 9 97      290
+10 98      296
+11 99      292</code></pre>
+</div>
+</div>
+<p>We can see from this table that the total number of article headlines from 1997-2000 was 1170, and the total number of headlines from 2001-2004 was 1154. Thus, the total article count is not the reason behind the difference in headline count per president.</p>
 <p>Another question of interest was whether the typical number of words per headline varied by month, and if this relationship changed depending on whether the headline contained punctuation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>NYTimesWM <span class="ot">&lt;-</span> NYTimes <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># extract month from date as new variable</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">str_extract</span>(Date, <span class="st">"(?&lt;=-).+(?=-)"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">word_list =</span> <span class="fu">str_split</span>(Title, <span class="st">" "</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">num_words =</span> <span class="fu">lengths</span>(word_list)) <span class="sc">|&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># variable for whether headline contains punctuation</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Punctuation =</span> <span class="fu">grepl</span>(<span class="st">"[[:punct:]]"</span>, Title))</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot  </span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(NYTimesWM, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_relevel</span>(Month, <span class="fu">c</span>(<span class="st">'Jan'</span>, <span class="st">'Feb'</span>, <span class="st">'Mar'</span>,</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Apr'</span>, <span class="st">'May'</span>, <span class="st">'Jun'</span>,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Jul'</span>, <span class="st">'Aug'</span>, <span class="st">'Sep'</span>,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Oct'</span>, <span class="st">'Nov'</span>, <span class="st">'Dec'</span>)), </span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> num_words, <span class="at">color =</span> Punctuation)) <span class="sc">+</span> </span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Length of New York Times Headlines by Month </span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">    With and Without Punctuation Between 1996 and 2006"</span>,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Words Per Headline"</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NYTimesWM <span class="ot">&lt;-</span> NYTimes <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># extract month from date as new variable</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">str_extract</span>(Date, <span class="st">"(?&lt;=-).+(?=-)"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">word_list =</span> <span class="fu">str_split</span>(Title, <span class="st">" "</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">num_words =</span> <span class="fu">lengths</span>(word_list)) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># variable for whether headline contains punctuation</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Punctuation =</span> <span class="fu">grepl</span>(<span class="st">"[[:punct:]]"</span>, Title))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot  </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(NYTimesWM, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_relevel</span>(Month, <span class="fu">c</span>(<span class="st">'Jan'</span>, <span class="st">'Feb'</span>, <span class="st">'Mar'</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Apr'</span>, <span class="st">'May'</span>, <span class="st">'Jun'</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Jul'</span>, <span class="st">'Aug'</span>, <span class="st">'Sep'</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Oct'</span>, <span class="st">'Nov'</span>, <span class="st">'Dec'</span>)), </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> num_words, <span class="at">color =</span> Punctuation)) <span class="sc">+</span> </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Length of New York Times Headlines by Month </span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="st">    With and Without Punctuation Between 1996 and 2006"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Words Per Headline"</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="textanalysis_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="This plot shows the distributions of the number of words per headline for each month for headlines with and without punctuation in a series of boxplots. The x-axis represents month, while the y-axis represents the number of words per headline. For each month, there is a red boxplot labeled 'FALSE' for headlines with no punctuations, and a blue boxplot labeled 'TRUE' for headlines with punctuation. By month, the distributions do not show a clear trend, but the ranges for February and November with punctuation appear to be the largest overall excluding outliers, while May has both the longest headline (largest outlier) and one of the shortest, at one word. The boxplots for headlines with punctuations show mostly higher median word counts than those without punctuation." width="672"></p>
+<p><img src="textanalysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="This plot shows the distributions of the number of words per headline for each month for headlines with and without punctuation in a series of boxplots. The x-axis represents month, while the y-axis represents the number of words per headline. For each month, there is a red boxplot labeled 'FALSE' for headlines with no punctuations, and a blue boxplot labeled 'TRUE' for headlines with punctuation. By month, the distributions do not show a clear trend, but the ranges for February and November with punctuation appear to be the largest overall excluding outliers, while May has both the longest headline (largest outlier) and one of the shortest, at one word. The boxplots for headlines with punctuations show mostly higher median word counts than those without punctuation." width="672"></p>
 </figure>
 </div>
 </div>

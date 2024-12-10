@@ -105,6 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -154,6 +155,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="./sqldata.html"> 
 <span class="menu-text">SQL Plotting</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./presentation.html"> 
+<span class="menu-text">DS002R Projects Overview</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -208,12 +213,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this project, I will use data from the “Olympic Athletes and Medals” folder from the TidyTuesday github repository. This data was originally scraped from www.sports-reference.com into a Kaggle dataset by RGriffin, and contains bio and medal results information on athletes from the 1896 Athens games through Rio 2016.</p>
+<p>In this project, I will use data from the “Olympic Athletes and Medals” folder from the TidyTuesday github repository. This data was originally scraped from <code>www.sports-reference.com</code> into a Kaggle dataset by RGriffin, and contains bio and medal results information on athletes from the 1896 Athens games through Rio 2016.</p>
 <p>I have selected six sports from the dataset: swimming, gymnastics, equestrianism, diving, weightlifting, and speed skating, with the intent to explore how the average age of Olympic participants varies by sport and how that has changed over time, using visuals.</p>
 <p>An example of the data can be seen below.</p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>olympics<span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sport <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Swimming"</span>, <span class="st">"Gymnastics"</span>, <span class="st">"Equestrianism"</span>, <span class="st">"Diving"</span>, <span class="st">"Weightlifting"</span>, <span class="st">"Speed Skating"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, year, sport, team, age, event, medal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 7
+<pre><code># A tibble: 68,638 × 7
    name                                year sport        team    age event medal
    &lt;chr&gt;                              &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
  1 "Christine Jacoba Aaftink"          1988 Speed Skati… Neth…    21 Spee… &lt;NA&gt; 
@@ -225,49 +233,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  7 "Einar Ferdinand \"Einari\" Aalto"  1952 Swimming     Finl…    26 Swim… &lt;NA&gt; 
  8 "Arvo Ossian Aaltonen"              1912 Swimming     Finl…    22 Swim… &lt;NA&gt; 
  9 "Arvo Ossian Aaltonen"              1912 Swimming     Finl…    22 Swim… &lt;NA&gt; 
-10 "Arvo Ossian Aaltonen"              1920 Swimming     Finl…    30 Swim… Bron…</code></pre>
+10 "Arvo Ossian Aaltonen"              1920 Swimming     Finl…    30 Swim… Bron…
+# ℹ 68,628 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(olympics, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 15
+      id name     sex     age height weight team  noc   games  year season city 
+   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;
+ 1     1 A Dijia… M        24    180     80 China CHN   1992…  1992 Summer Barc…
+ 2     2 A Lamusi M        23    170     60 China CHN   2012…  2012 Summer Lond…
+ 3     3 Gunnar … M        24     NA     NA Denm… DEN   1920…  1920 Summer Antw…
+ 4     4 Edgar L… M        34     NA     NA Denm… DEN   1900…  1900 Summer Paris
+ 5     5 Christi… F        21    185     82 Neth… NED   1988…  1988 Winter Calg…
+ 6     5 Christi… F        21    185     82 Neth… NED   1988…  1988 Winter Calg…
+ 7     5 Christi… F        25    185     82 Neth… NED   1992…  1992 Winter Albe…
+ 8     5 Christi… F        25    185     82 Neth… NED   1992…  1992 Winter Albe…
+ 9     5 Christi… F        27    185     82 Neth… NED   1994…  1994 Winter Lill…
+10     5 Christi… F        27    185     82 Neth… NED   1994…  1994 Winter Lill…
+# ℹ 3 more variables: sport &lt;chr&gt;, event &lt;chr&gt;, medal &lt;chr&gt;</code></pre>
 </div>
 </div>
 <p>Then, I wrangled the data to find the average age of athletes from each year and selected sport. Note that not all of these sports were part of the Olympics in 1896, so average values only appear for the years that the sport was contested in the Olympics.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate average age in each sport by olympic year, to be plotted</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>olympics_plot <span class="ot">&lt;-</span> olympics <span class="sc">|&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sport) <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(olympics_plot, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate average age in each sport by olympic year, to be plotted</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>olympics_plot <span class="ot">&lt;-</span> olympics <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sport) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(olympics_plot, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 3
-# Groups:   year [3]
+# Groups:   year [2]
     year sport         avg_age
    &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;
- 1  1896 Gymnastics       24.3
- 2  1896 Swimming         18.7
- 3  1896 Weightlifting    22.2
- 4  1900 Equestrianism    38.9
- 5  1900 Gymnastics       22.2
- 6  1900 Swimming         21.8
- 7  1904 Diving           23.7
- 8  1904 Gymnastics       25.1
- 9  1904 Swimming         22.9
-10  1904 Weightlifting    23  </code></pre>
+ 1  1896 Athletics        22.4
+ 2  1896 Cycling          22.7
+ 3  1896 Fencing          21.7
+ 4  1896 Gymnastics       24.3
+ 5  1896 Shooting         30.7
+ 6  1896 Swimming         18.7
+ 7  1896 Tennis           21.1
+ 8  1896 Weightlifting    22.2
+ 9  1896 Wrestling        23.3
+10  1900 Archery          36.0</code></pre>
 </div>
 </div>
-<p>Then, I created a plot of this data of year vs average age, separating each sport into a different colored line.</p>
+<p>Next, I created a plot of this data of year vs average age, separating each sport into a different colored line.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(olympics_plot, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> avg_age, <span class="at">color =</span> sport)) <span class="sc">+</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Age of Olympic Participants by Sport"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Olympic Year"</span>, </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average age of Participants"</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(olympics_plot, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> avg_age, <span class="at">color =</span> sport)) <span class="sc">+</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Age of Olympic Participants by Sport"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Olympic Year"</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average age of Participants"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="visualization1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="This plot shows the average age of olympic participants in each sport from the years 1896 to 2016. The x-axis represents the year for each Olympics, and the y-axis represents the average age of participants in a given sport for that Olympic games. The data points are marked as colored points along a separate trend line for each of the six sports. The lines follow similar trajectories, each showing a bit of a peak around 1950 before falling, and trending slowly back upwards in average age approaching current day. The average age for equestrian olympians is about 10-15 years higher than each of the other sports, which are more clumped together between 18 and 28 years of age." width="672"></p>
+<p><img src="visualization1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="This plot shows the average age of olympic participants in each sport from the years 1896 to 2016. The x-axis represents the year for each Olympics, and the y-axis represents the average age of participants in a given sport for that Olympic games. The data points are marked as colored points along a separate trend line for each of the six sports. The lines follow similar trajectories, each showing a bit of a peak around 1950 before falling, and trending slowly back upwards in average age approaching current day. The average age for equestrian olympians is about 10-15 years higher than each of the other sports, which are more clumped together between 18 and 28 years of age." width="672"></p>
 </figure>
 </div>
 </div>

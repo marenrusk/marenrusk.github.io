@@ -21,12 +21,18 @@ knitr::opts_chunk$set(error = TRUE)
 library(tidyverse)
 library(ggplot2)
 
-olympics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-08-06/olympics.csv') |>
+olympics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-08-06/olympics.csv') 
+```
+
+```{r}
+olympics|>
   filter(sport %in% c("Swimming", "Gymnastics", "Equestrianism", "Diving", "Weightlifting", "Speed Skating")) |>
   select(name, year, sport, team, age, event, medal)
 
 head(olympics, 10)
 ```
+
+
 
 Then, I wrangled the data to find the average age of athletes from each year and selected sport. Note that not all of these sports were part of the Olympics in 1896, so average values only appear for the years that the sport was contested in the Olympics.
 

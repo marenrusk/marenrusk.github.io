@@ -57,11 +57,11 @@ cheeses |>
 
 **Analysis:**
 
-This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count leads me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot.
+This plot more clearly shows a variation in cheese color depending on the country. The chart shows a much higher total count United States cheeses, of over 200 cheeses. The others have between 25 and 100 types of cheese. Australia, France, and Italy most commonly have white cheeses, while the United States has more pale yellow cheeses. Canada displays relatively equal numbers of white, pale yellow, golden yellow, and cream cheeses. The high proportion of US pale yellow cheeses, as well as the high cheese count led me to wonder if the United States cheeses make up most of the natural rind cheeses shown in the first plot. The tables below show the most common rind types among US cheeses, and the countries with the most natural-rinded cheeses, respectively.
 
 ```{r}
 cheeses |>
-  filter(country == "United States") |>
+  filter(country == "United States", !is.na(rind)) |>
   group_by(rind) |>
   summarize(rind_num = n()) |>
   arrange(desc(rind_num)) |>
@@ -77,6 +77,6 @@ cheeses |>
   
 ```
 
-Wrangling the data, we do in fact find that natural rinds make up for 124 of the 305 United States cheese types, and that the United States contains by far the highest number of cheeses with natural rinds.
+From the above, we can in fact see that natural rinds make up for 124 of the 305 United States cheese types, and that the United States contains by far the highest number of cheeses with natural rinds.
 
 **Link to Data:** <https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-06-04>
