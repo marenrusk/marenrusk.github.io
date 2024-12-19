@@ -25,7 +25,7 @@ olympics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/t
 ```
 
 ```{r}
-olympics|>
+olympics <- olympics |>
   filter(sport %in% c("Swimming", "Gymnastics", "Equestrianism", "Diving", "Weightlifting", "Speed Skating")) |>
   select(name, year, sport, team, age, event, medal)
 
