@@ -8,15 +8,15 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - text: "Tidy Tuesday Data Vizualizations"
+      - text: "Data Science Projects"
         menu: 
          - text: Olympics
            href: visualization1.html
          - text: Cheese
            href: visualization2.html
-      - href: textanalysis.qmd
-      - href: simulationanalysis.qmd
-      - href: sqldata.qmd
+         - href: textanalysis.qmd
+         - href: simulationanalysis.qmd
+         - href: sqldata.qmd
       - href: presentation.qmd
            
 
