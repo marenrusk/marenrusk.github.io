@@ -10,13 +10,14 @@ website:
         text: Home
       - text: "Data Science Projects"
         menu: 
-         - text: Olympics
-           href: visualization1.html
-         - text: Cheese
-           href: visualization2.html
-         - href: textanalysis.qmd
-         - href: simulationanalysis.qmd
+         # - href: comppoli.qmd
          - href: sqldata.qmd
+         - href: simulationanalysis.qmd
+         - href: textanalysis.qmd
+         - text: Olympics Exploration
+           href: visualization1.html
+         - text: Global Cheeses
+           href: visualization2.html
       - href: presentation.qmd
            
 

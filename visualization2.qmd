@@ -1,6 +1,6 @@
 ---
-title: "Cheese!"
-description: Analysis of cheese data from TidyTuesday
+title: "Global Cheeses"
+description: Analysis of cheese data from TidyTuesday.
 author: Maren Rusk
 date: September 18, 2024
 format: html

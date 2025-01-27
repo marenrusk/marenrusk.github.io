@@ -1,6 +1,6 @@
 ---
-title: "SQL Plotting"
-description: Plotting Ear Measurements from WAI Database
+title: "Auditory Absorbance"
+description: Plotting ear measurements from the WAI Database using SQL.
 author: Maren Rusk
 date: November 26, 2024
 format: html

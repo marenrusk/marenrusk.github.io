@@ -1,6 +1,6 @@
 ---
-title: "Permutation Tests"
-description: Exploring Gender Stereotypes Among Young Children
+title: "Gender Stereotypes in Early Development"
+description: Exploring gender stereotypes among young children using permutation tests.
 author: Maren Rusk
 date: November 8, 2024
 format: html

@@ -1,6 +1,6 @@
 ---
 title: "NYT Headline Analysis"
-description: Analysis of New York Times Headlines Data from RTextTools Package
+description: Analyzing New York Times headlines data from the RTextTools Package using string methods and regular expressions.
 author: Maren Rusk
 date: October 2, 2024
 format: html

@@ -1,5 +1,5 @@
 ---
-title: "Olympics"
+title: "Olympics Exploration"
 description: Analysis of Olympic athletes from TidyTuesday
 author: Maren Rusk
 date: September 18, 2024
