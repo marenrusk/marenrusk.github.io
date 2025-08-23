@@ -1,0 +1,57 @@
+---
+title: "ABCD Racial Disaggregation"
+description: Examination of Adolescent Psychopathology Outcomes among disaggregated Asian American subgroups from the Adolescent Brain Cognitive Development Study
+author: Maren Rusk
+date: August 7, 2025
+format: html
+execute:
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+::: {.callout-note}
+In the summer of 2025, I got the opportunity to complete an "Equitable
+Data Science" research project, in collaboration with fellow undergrad
+Sarah Thomson of Macalester College, advised by Ellery Island[^1], Dr.
+Mark Fiecas^1^, and Dr. Kirsten McKone[^2] as part of an REU through the
+University of Minnesota School of Public Health. Below is a description
+of our project, as well as a link to the Shiny app we created.
+:::
+
+[^1]: University of Minnesota, Division of Biostatistics and Health Data
+    Science
+
+[^2]: University of Minnesota, Institute of Child Development
+
+#### **Aggregating Asian Americans Masks Subgroup Variation in Adolescent Psychopathology**
+
+Using the monolithic “Asian American” (i.e., Asian American, Native
+Hawaiian, Pacific Islander) race label overlooks significant disparities
+between specific Asian ethnic and sociodemographic groups. Collecting
+and reporting disaggregated ethnoracial data is essential for
+identifying, prioritizing, and understanding the experiences of
+individuals at risk for various psychopathologies. Using data from the
+Adolescent Brain Cognitive Development (ABCD) study, we investigated the
+roles of ethnic identity and intersectional sociocultural factors that
+may influence Asian American experiences, and how these identities
+contribute to the prevalence of psychopathologies among Asian American
+adolescents. 
+
+We disaggregated Asian American participants by ethnicity and latent
+classes based on socioeconomic and cultural indicators. Then, we
+examined psychopathology outcomes of the subgroups using mixed linear
+and logistic regression models. Finally, we investigated the utility of
+incorporating disaggregated Asian subgroups into race-based mixed models
+instead of typical aggregated models. The disaggregated models reveal
+that different Asian American subgroups do not follow the same pattern
+as a monolithic Asian American group when compared with other racial
+identities, across all examined psychopathology measures. For this
+reason, we conclude that disaggregating Asian Americans in race-based
+models is essential to accurately assess psychopathology risks for
+vulnerable subpopulations that may be overlooked by aggregated analyses.
+
+**Shiny App Link:**
+<https://0nay3k-sethomson.shinyapps.io/Shiny_Racial_Disaggregation/>
