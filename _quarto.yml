@@ -9,6 +9,7 @@ website:
       - href: index.qmd
         text: Home
       - href: reuracialdisaggregation.qmd
+      - href: compstats.qmd
       - text: "Intro Data Science Projects"
         menu: 
          # - href: comppoli.qmd

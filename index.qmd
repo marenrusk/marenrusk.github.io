@@ -9,8 +9,9 @@ about:
   links: 
     - text: Email
       href: mailto:msrx2023@mymail.pomona.edu
-    - text: GitHub
-      href: https://github.com/marenrusk
+    - text: LinkedIn
+      href: www.linkedin.com/in/maren-rusk-aa8b03334
+
 ---
 
 

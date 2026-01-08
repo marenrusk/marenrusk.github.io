@@ -1,0 +1,24 @@
+---
+title: "CA School District Funding"
+description: Spatial Exploration of Per-Pupil Expenditures Across California Public School Districts
+author: Maren Rusk
+date: January 7, 2026
+format: html
+execute:
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+::: {.callout-note}
+As part of my Computational Statistics course in the fall of 2025, I worked with two other undergraduate students to explore and visualize educational spending in California, specifically how per-pupil expenditure and geography are related. We identified educational districts that formed statistically significant high-PPE and low-PPE clusters and examined whether these patterns persisted after adjusting for demographic and socioeconomic factors. Our Shiny app, linked below, allows users to interactively explore these spatial patterns and compare funding levels across districts.
+:::
+
+#### **Abstract**
+
+School funding disparities are often linked to demographic and socioeconomic differences, but less is known about whether funding varies systematically across space beyond these predictors. Using district-level per-pupil expenditure data from California, we examine whether school funding exhibits significant geographic clustering and whether such clustering persists after accounting for student demographics. We apply Global and Local Moran’s I statistics to assess spatial autocorrelation and identify precise geographical clusters across the state, finding modest but statistically significant spatial dependence in funding levels. Although demographic and need-based variables account for some variation in per-pupil expenditure, substantial spatial clustering remains unexplained. These results suggest that funding patterns reflect geographically structured variation beyond observable demographic traits, highlighting spatial context as an important dimension of California’s educational landscape. 
+
+**Shiny App Link:**
+<https://mrusk.shinyapps.io/shiny_education_spending_ca/>
